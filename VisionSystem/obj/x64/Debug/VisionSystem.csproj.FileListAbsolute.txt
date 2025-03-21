@@ -1,0 +1,23 @@
+D:\VisionPro 연습\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\bin\Debug\VisionSystem.exe.config
+D:\VisionPro 연습\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\bin\Debug\VisionSystem.exe
+D:\VisionPro 연습\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\bin\Debug\VisionSystem.pdb
+D:\VisionPro 연습\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.csproj.AssemblyReference.cache
+D:\VisionPro 연습\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.MainForm.resources
+D:\VisionPro 연습\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.Properties.Resources.resources
+D:\VisionPro 연습\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.SetupForm.resources
+D:\VisionPro 연습\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.csproj.GenerateResource.cache
+D:\VisionPro 연습\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.csproj.CoreCompileInputs.cache
+D:\VisionPro 연습\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.exe
+D:\VisionPro 연습\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.pdb
+C:\Users\alsrb\OneDrive\Desktop\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\bin\Debug\VisionSystem.exe.config
+C:\Users\alsrb\OneDrive\Desktop\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\bin\Debug\VisionSystem.exe
+C:\Users\alsrb\OneDrive\Desktop\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\bin\Debug\VisionSystem.pdb
+C:\Users\alsrb\OneDrive\Desktop\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.csproj.AssemblyReference.cache
+C:\Users\alsrb\OneDrive\Desktop\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.MainForm.resources
+C:\Users\alsrb\OneDrive\Desktop\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.Properties.Resources.resources
+C:\Users\alsrb\OneDrive\Desktop\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.SetupForm.resources
+C:\Users\alsrb\OneDrive\Desktop\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.SplashForm.resources
+C:\Users\alsrb\OneDrive\Desktop\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.csproj.GenerateResource.cache
+C:\Users\alsrb\OneDrive\Desktop\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.csproj.CoreCompileInputs.cache
+C:\Users\alsrb\OneDrive\Desktop\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.exe
+C:\Users\alsrb\OneDrive\Desktop\커리큘럼 3회차 최민규\VisionSystem\VisionSystem\obj\x64\Debug\VisionSystem.pdb
