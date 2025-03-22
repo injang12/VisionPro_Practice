@@ -130,13 +130,6 @@
     <Compile Include="Form\SetupForm.Designer.cs">
       <DependentUpon>SetupForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Class\SplashManager.cs" />
-    <Compile Include="Form\SplashForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form\SplashForm.Designer.cs">
-      <DependentUpon>SplashForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Class\ToolManager.cs" />
     <EmbeddedResource Include="Form\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -152,9 +145,6 @@
     </Compile>
     <EmbeddedResource Include="Form\SetupForm.resx">
       <DependentUpon>SetupForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form\SplashForm.resx">
-      <DependentUpon>SplashForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

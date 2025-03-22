@@ -340,13 +340,7 @@ namespace VisionSystem
         {
             string path = Path.Combine(Application.StartupPath, "Param", "Param.ini");
 
-            if (!File.Exists(path))
-            {
-                SplashManager.Instance.UpdateLoadingBar(100);
-                SplashManager.Instance.Close();
-                SplashManager.Instance.Join();
-                return;
-            } 
+            if (!File.Exists(path)) return;
 
             Set_INI_Path(path);
 
@@ -383,9 +377,6 @@ namespace VisionSystem
             Pattern.PTrain = Convert.ToBoolean(ReadValue("Train", "Point"));
             Pattern.ATrain = Convert.ToBoolean(ReadValue("Train", "Angle"));
 
-            SplashManager.Instance.UpdateLoadingBar(99);
-            SplashManager.Instance.SetStatus("Image loading...");
-
             if (Pattern.PTrain)
             {
                 Load_Image(SetupForm.Instance.PDisplay, "Point");
@@ -408,10 +399,6 @@ namespace VisionSystem
                 Pattern.InputImage = Image;
                 ToolManager.PMAlign.Instance.TrainPattern(DataStore.Region.Instance.ATrainRegion, DataStore.Pattern.Instance.APattern);
             }
-
-            SplashManager.Instance.UpdateLoadingBar(100);
-            SplashManager.Instance.Close();
-            SplashManager.Instance.Join();
         }
     }
 }

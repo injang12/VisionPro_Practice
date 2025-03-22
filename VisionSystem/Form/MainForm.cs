@@ -2,20 +2,7 @@
 {
     public partial class MainForm : System.Windows.Forms.Form
     {
-        readonly SplashManager Splash = SplashManager.Instance;
-
-        public MainForm()
-        {
-            Splash.Start();
-            Splash.UpdateLoadingBar(30);
-            Splash.SetStatus("Main form loading...");
-
-            InitializeComponent();
-
-            Splash.UpdateLoadingBar(80);
-            Splash.SetStatus("Parameter loading...");
-        }
-
+        public MainForm() => InitializeComponent();
         void MainForm_Load(object sender, System.EventArgs e) => FileManager.Instance.ParamLoad();
         void BtnExit_Click(object sender, System.EventArgs e) => this.Dispose();
         void BtnSetup_Click(object sender, System.EventArgs e) => SetupForm.Instance.ShowDialog();
