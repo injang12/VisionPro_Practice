@@ -79,7 +79,7 @@ namespace VisionSystem
 
                     if (string.IsNullOrEmpty(folderPath))
                     {
-                        LogManager.PrintLog(LogBox, "Failed to specify folder...");
+                        Utilities.PrintLog(LogBox, "Failed to specify folder...");
                         return;
                     }
 
@@ -97,11 +97,11 @@ namespace VisionSystem
                     if (FileName.Count > 0)
                     {
                         imageIndex = 0;
-                        LogManager.PrintLog(LogBox, $"Directory specified successfully! {FileName.Count} images found.");
+                        Utilities.PrintLog(LogBox, $"Directory specified successfully! {FileName.Count} images found.");
                     }
-                    else LogManager.PrintLog(LogBox, "No valid image files found in the selected folder.");
+                    else Utilities.PrintLog(LogBox, "No valid image files found in the selected folder.");
                 }
-                else LogManager.PrintLog(LogBox, "Failed to specify folder...");
+                else Utilities.PrintLog(LogBox, "Failed to specify folder...");
             }
         }
 
@@ -113,7 +113,7 @@ namespace VisionSystem
         {
             if (SetupImageFileName.Count == 0)
             {
-                LogManager.PrintLog(LogBox, "The specified folder does not exist...");
+                Utilities.PrintLog(LogBox, "The specified folder does not exist...");
                 return null;
             }
 
@@ -131,7 +131,7 @@ namespace VisionSystem
         {
             if (SetupImageFileName.Count == 0)
             {
-                LogManager.PrintLog(LogBox, "The specified folder does not exist...");
+                Utilities.PrintLog(LogBox, "The specified folder does not exist...");
                 return null;
             }
 
@@ -259,7 +259,7 @@ namespace VisionSystem
 
                     ImageFileTool.Operator.Close();
                 }
-                LogManager.PrintLog(LogBox, "Image Load Successful!");
+                Utilities.PrintLog(LogBox, "Image Load Successful!");
             }
         }
 
@@ -330,7 +330,7 @@ namespace VisionSystem
             WriteValue("Train", "Point", Pattern.PTrain.ToString());
             WriteValue("Train", "Angle", Pattern.ATrain.ToString());
 
-            LogManager.PrintLog(LogBox, "Successfully saved parameters.");
+            Utilities.PrintLog(LogBox, "Successfully saved parameters.");
         }
 
         /// <summary>

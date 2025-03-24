@@ -230,7 +230,7 @@ namespace VisionSystem
         {
             if (FManager.MainImageFileName.Count == 0)
             {
-                LogManager.PrintLog(LogBox, "Image folder is not registered...");
+                Utilities.PrintLog(LogBox, "Image folder is not registered...");
                 return;
             }
 
@@ -243,7 +243,7 @@ namespace VisionSystem
                 BtnSetup.BackColor = Color.FromArgb(40, 40, 40);
                 BtnExit.Enabled = true;
                 BtnExit.BackColor = Color.FromArgb(40, 40, 40);
-                LogManager.PrintLog(LogBox, "Stop automatic inspection...");
+                Utilities.PrintLog(LogBox, "Stop automatic inspection...");
                 return;
             }
             else
@@ -258,7 +258,7 @@ namespace VisionSystem
                 BtnSetup.BackColor = Color.Red;
                 BtnExit.Enabled = false;
                 BtnExit.BackColor = Color.Red;
-                LogManager.PrintLog(LogBox, "Start automatic inspection...");
+                Utilities.PrintLog(LogBox, "Start automatic inspection...");
 
                 Thread InspThread = new Thread(() =>
                 {
@@ -275,7 +275,7 @@ namespace VisionSystem
                             BtnExit.Invoke(new Action(() => BtnExit.Enabled = true));
                             BtnExit.Invoke(new Action(() => BtnExit.BackColor = Color.FromArgb(40, 40, 40)));
 
-                            LogBox.Invoke(new Action(() => LogManager.PrintLog(LogBox, "Automatic inspection completed!!")));
+                            LogBox.Invoke(new Action(() => Utilities.PrintLog(LogBox, "Automatic inspection completed!!")));
                         }
                     }
                     
@@ -343,7 +343,7 @@ namespace VisionSystem
             {
                 if (SDisplay.Image == null)
                 {
-                    LogManager.PrintLog(LogList, "There is no image.");
+                    Utilities.PrintLog(LogList, "There is no image.");
                     return;
                 }
 
@@ -395,7 +395,7 @@ namespace VisionSystem
                 FManager.Save_ImageFile(Path.Combine(imagePath, $"{toolName}Mask.bmp"), Pattern.MaskImage);
                 FManager.Save_ImageFile(Path.Combine(imagePath, "MasterImage.bmp"), SDisplay.Image);
 
-                LogManager.PrintLog(LogList, "Image Train and Save Complete!");
+                Utilities.PrintLog(LogList, "Image Train and Save Complete!");
             }
 
             /// <summary>
@@ -442,13 +442,13 @@ namespace VisionSystem
 
                 if (Display.Image == null)
                 {
-                    if (LogBox != null) LogManager.PrintLog(LogBox, "There is no image.");
+                    if (LogBox != null) Utilities.PrintLog(LogBox, "There is no image.");
                     return false;
                 }
 
                 if (!PMAlignTool.Pattern.Trained)
                 {
-                    if (LogBox != null) LogManager.PrintLog(LogBox, "There are no registered patterns.");
+                    if (LogBox != null) Utilities.PrintLog(LogBox, "There are no registered patterns.");
                     return false;
                 } 
 
@@ -496,10 +496,10 @@ namespace VisionSystem
                 switch (mode)
                 {
                     case "Run":
-                        LogManager.PrintLog(LogBox, "Pattern run complete!");
+                        Utilities.PrintLog(LogBox, "Pattern run complete!");
                         break;
                     case "ManualRun":
-                        LogManager.PrintLog(LogBox, "Manual run complete!");
+                        Utilities.PrintLog(LogBox, "Manual run complete!");
                         break;
                     default:
                         break;

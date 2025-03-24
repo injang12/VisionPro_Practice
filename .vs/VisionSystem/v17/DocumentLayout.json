@@ -3,32 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|c:\\users\\alsrb\\desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\visionsystem\\visionsystem\\class\\filemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|solutionrelative:visionsystem\\class\\filemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\visionsystem\\class\\toolmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|solutionrelative:visionsystem\\class\\toolmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\visionsystem\\class\\logmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|solutionrelative:visionsystem\\class\\logmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\visionsystem\\form\\setupform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|solutionrelative:visionsystem\\form\\setupform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\visionsystem\\class\\datastore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|solutionrelative:visionsystem\\class\\datastore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\visionsystem\\form\\setupform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|solutionrelative:visionsystem\\form\\setupform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|c:\\users\\alsrb\\desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\visionsystem\\visionsystem\\class\\filemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|solutionrelative:visionsystem\\class\\filemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\visionsystem\\form\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|solutionrelative:visionsystem\\form\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\visionsystem\\form\\setupform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|solutionrelative:visionsystem\\form\\setupform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|c:\\users\\alsrb\\desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\visionsystem\\visionsystem\\class\\utilities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|solutionrelative:visionsystem\\class\\utilities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\visionsystem\\form\\setupform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|solutionrelative:visionsystem\\form\\setupform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{803D5FB6-DA64-4BD6-8786-3C5BE4F31259}|VisionSystem\\VisionSystem.csproj|C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\visionsystem\\form\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
@@ -42,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,20 +54,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "FileManager.cs",
               "DocumentMoniker": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Class\\FileManager.cs",
               "RelativeDocumentMoniker": "VisionSystem\\Class\\FileManager.cs",
               "ToolTip": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Class\\FileManager.cs",
               "RelativeToolTip": "VisionSystem\\Class\\FileManager.cs",
-              "ViewState": "AgIAAEMBAAAAAAAAAAAuwFEBAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAACYAAAAAAAAAAAAswDMAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-21T23:06:37.762Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "DataStore.cs",
               "DocumentMoniker": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Class\\DataStore.cs",
               "RelativeDocumentMoniker": "VisionSystem\\Class\\DataStore.cs",
@@ -75,58 +75,63 @@
               "RelativeToolTip": "VisionSystem\\Class\\DataStore.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABRAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-21T23:06:20.26Z"
+              "WhenOpened": "2025-03-21T23:06:20.26Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "LogManager.cs",
-              "DocumentMoniker": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Class\\LogManager.cs",
-              "RelativeDocumentMoniker": "VisionSystem\\Class\\LogManager.cs",
-              "ToolTip": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Class\\LogManager.cs",
-              "RelativeToolTip": "VisionSystem\\Class\\LogManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "Utilities.cs",
+              "DocumentMoniker": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Class\\Utilities.cs",
+              "RelativeDocumentMoniker": "VisionSystem\\Class\\Utilities.cs",
+              "ToolTip": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Class\\Utilities.cs",
+              "RelativeToolTip": "VisionSystem\\Class\\Utilities.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-22T00:04:02.207Z"
+              "WhenOpened": "2025-03-22T00:04:02.207Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "ToolManager.cs",
               "DocumentMoniker": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Class\\ToolManager.cs",
               "RelativeDocumentMoniker": "VisionSystem\\Class\\ToolManager.cs",
               "ToolTip": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Class\\ToolManager.cs",
               "RelativeToolTip": "VisionSystem\\Class\\ToolManager.cs",
-              "ViewState": "AgIAAK8BAAAAAAAAAAAmwOkBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFQBAAAAAAAAAAAcwPABAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-21T23:02:51.354Z"
+              "WhenOpened": "2025-03-21T23:02:51.354Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "SetupForm.cs",
               "DocumentMoniker": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Form\\SetupForm.cs",
               "RelativeDocumentMoniker": "VisionSystem\\Form\\SetupForm.cs",
               "ToolTip": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Form\\SetupForm.cs",
               "RelativeToolTip": "VisionSystem\\Form\\SetupForm.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-22T00:03:55.237Z"
+              "WhenOpened": "2025-03-22T00:03:55.237Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "SetupForm.cs [\uB514\uC790\uC778]",
               "DocumentMoniker": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Form\\SetupForm.cs",
               "RelativeDocumentMoniker": "VisionSystem\\Form\\SetupForm.cs",
               "ToolTip": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Form\\SetupForm.cs [\uB514\uC790\uC778]",
               "RelativeToolTip": "VisionSystem\\Form\\SetupForm.cs [\uB514\uC790\uC778]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-22T00:03:54.817Z"
+              "WhenOpened": "2025-03-22T00:03:54.817Z",
+              "EditorCaption": " [\uB514\uC790\uC778]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 3,
               "Title": "MainForm.cs",
               "DocumentMoniker": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Form\\MainForm.cs",
               "RelativeDocumentMoniker": "VisionSystem\\Form\\MainForm.cs",
@@ -134,7 +139,8 @@
               "RelativeToolTip": "VisionSystem\\Form\\MainForm.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-22T00:03:53.782Z"
+              "WhenOpened": "2025-03-22T00:03:53.782Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -145,7 +151,8 @@
               "ToolTip": "C:\\Users\\alsrb\\Desktop\\\uCEE4\uB9AC\uD058\uB7FC 3\uD68C\uCC28 \uCD5C\uBBFC\uADDC\\VisionSystem\\VisionSystem\\Form\\MainForm.cs [\uB514\uC790\uC778]",
               "RelativeToolTip": "VisionSystem\\Form\\MainForm.cs [\uB514\uC790\uC778]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-22T00:03:52.019Z"
+              "WhenOpened": "2025-03-22T00:03:52.019Z",
+              "EditorCaption": " [\uB514\uC790\uC778]"
             }
           ]
         }

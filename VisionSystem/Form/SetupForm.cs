@@ -25,45 +25,6 @@ namespace VisionSystem
         void BtnARun_Click(object sender, System.EventArgs e) => PMAlign.PatternRun(SDisplay, Pattern.APattern, Region.ARegion, Pattern.AAngle, Pattern.AThreshold, "Run", LogList);
         void BtnPRun_Click(object sender, System.EventArgs e) => PMAlign.PatternRun(SDisplay, Pattern.PPattern, Region.PRegion, Pattern.PAngle, Pattern.PThreshold, "Run", LogList);
         void BtnManualRun_Click(object sender, System.EventArgs e) => TManager.RunManual(SDisplay, LogList);
-        void ChkBox_CheckedChanged(object sender, System.EventArgs e) => SelectedCheckBox((CheckBox)sender);
-
-        /// <summary>
-        /// 체크 박스 선택
-        /// </summary>
-        /// <param name="ChkBox">사용 할 체크박스</param>
-        void SelectedCheckBox(CheckBox ChkBox)
-        {
-            if (ChkBox.Checked)
-            {
-                switch (ChkBox.Text)
-                {
-                    case "PointPattern":
-                        ChkAngle.Enabled = false;
-                        PointPatternGroup.Visible = true;
-                        PointPatternGroup.Location = new System.Drawing.Point(10, 10);
-                        break;
-                    case "AnglePattern":
-                        ChkPoint.Enabled = false;
-                        AnglePatternGroup.Visible = true;
-                        AnglePatternGroup.Location = new System.Drawing.Point(10, 10);
-                        break;
-                }
-            }
-            else
-            {
-                TManager.DisplayClear(SDisplay);
-                switch (ChkBox.Text)
-                {
-                    case "PointPattern":
-                        ChkAngle.Enabled = true;
-                        PointPatternGroup.Visible= false;
-                        break;
-                    case "AnglePattern":
-                        ChkPoint.Enabled = true;
-                        AnglePatternGroup.Visible = false;
-                        break;
-                }
-            }
-        }
+        void ChkBox_CheckedChanged(object sender, System.EventArgs e) => Utilities.SelectedCheckBox(SDisplay, (CheckBox)sender, ChkAngle, ChkPoint, PointPatternGroup, AnglePatternGroup);
     }
 }
