@@ -23,23 +23,13 @@ namespace VisionSystem
         int count = 0;              // 자동 검사 이미지 카운팅
 
         /// <summary>
-        /// 디스플레이 그래픽 제거
-        /// </summary>
-        /// <param name="Display">제거 할 디스플레이</param>
-        public void DisplayClear(CogRecordDisplay Display)
-        {
-            Display.StaticGraphics.Clear();
-            Display.InteractiveGraphics.Clear();
-        }
-
-        /// <summary>
         /// 영역 생성
         /// </summary>
         /// <param name="Display">출력 할 디스플레이</param>
         /// <param name="SelectedBtn">선택한 버튼</param>
         public void InitRegion(CogRecordDisplay Display, Button SelectedBtn)
         {
-            DisplayClear(Display);
+            Utilities.DisplayClear(Display);
 
             CogRectangleAffine SearchRegion;
 
@@ -115,7 +105,7 @@ namespace VisionSystem
             double thetaRad = Math.Atan2(dy, dx);
 
             // 0°를 위쪽(↑)으로 변환 90° 빼기
-            double resultAngle = RadianDegreeConvert("D", thetaRad) - 90;
+            double resultAngle = Utilities.RadianDegreeConvert("D", thetaRad) - 90;
 
             // -180~180° 범위로 변환
             if (resultAngle < -180) resultAngle += 360;
@@ -133,7 +123,7 @@ namespace VisionSystem
 
             CreateLineTool.Line.X = x2;
             CreateLineTool.Line.Y = y2;
-            CreateLineTool.Line.Rotation = RadianDegreeConvert("R", 90);
+            CreateLineTool.Line.Rotation = Utilities.RadianDegreeConvert("R", 90);
 
             CreateLineTool.Run();
 
@@ -158,53 +148,13 @@ namespace VisionSystem
         }
 
         /// <summary>
-        /// 라디안 or 디그리 변환
-        /// </summary>
-        /// <param name="convertName">변환 하고 싶은 이름 R or D</param>
-        /// <param name="currentValue">변환 전 각도 값</param>
-        /// <returns>double</returns>
-        /// <exception cref="ArgumentException"></exception>
-        double RadianDegreeConvert(string convertName, double currentValue)
-        {
-            convertName = convertName.ToLower();
-
-            if (convertName == "r") return currentValue * (Math.PI / 180);
-            else if (convertName == "d") return currentValue * (180.0 / Math.PI);
-
-            throw new ArgumentException("Invalid conversion type. Please enter 'R' or 'D'.");
-        }
-
-        /// <summary>
-        /// 값 체인지
-        /// </summary>
-        /// <param name="Numeric">변경 할 컨트롤(Numeric)</param>
-        public void NumericValueChange(NumericUpDown Numeric)
-        {
-            switch (Numeric.Name)
-            {
-                case "NumAAngle":
-                    Pattern.AAngle = (double)Numeric.Value;
-                    break;
-                case "NumAThreshold":
-                    Pattern.AThreshold = (double)Numeric.Value;
-                    break;
-                case "NumPAngle":
-                    Pattern.PAngle = (double)Numeric.Value;
-                    break;
-                case "NumPThreshold":
-                    Pattern.PThreshold = (double)Numeric.Value;
-                    break;
-            }
-        }
-
-        /// <summary>
         /// 매뉴얼 런
         /// </summary>
         /// <param name="Display">지정 할 디스플레이</param>
         /// <param name="LogList">로그 창 지정</param>
         public void RunManual(CogRecordDisplay Display, ListBox LogList)
         {
-            DisplayClear(Display);
+            Utilities.DisplayClear(Display);
 
             if (!PMAlign.Instance.PatternRun(Display, Pattern.PPattern, Region.PRegion, Pattern.PAngle, Pattern.PThreshold, "", LogList)) return;
             if (!PMAlign.Instance.PatternRun(Display, Pattern.APattern, Region.ARegion, Pattern.AAngle, Pattern.AThreshold, "ManualRun", LogList)) return;
@@ -221,16 +171,16 @@ namespace VisionSystem
         /// 자동 검사 시작 메서드
         /// </summary>
         /// <param name="Display">검사 화면 지정</param>
-        /// <param name="LogBox">로그 창 지정</param>
+        /// <param name="LogList">로그 창 지정</param>
         /// <param name="BtnSetup">셋업 버튼 비활성화</param>
         /// <param name="BtnFolder">폴더 지정 버튼 비활성화</param>
         /// <param name="BtnExit">종료 버튼 비활성화</param>
         /// <param name="CurrentImageName">현재 이미지 이름</param>
-        public void AutoInspection(CogRecordDisplay Display, ListBox LogBox, Button BtnSetup, Button BtnFolder, Button BtnExit, Label CurrentImageName)
+        public void AutoInspection(CogRecordDisplay Display, ListBox LogList, Button BtnSetup, Button BtnFolder, Button BtnExit, Label CurrentImageName)
         {
             if (FManager.MainImageFileName.Count == 0)
             {
-                Utilities.PrintLog(LogBox, "Image folder is not registered...");
+                Utilities.PrintLog(LogList, "Image folder is not registered...");
                 return;
             }
 
@@ -243,7 +193,7 @@ namespace VisionSystem
                 BtnSetup.BackColor = Color.FromArgb(40, 40, 40);
                 BtnExit.Enabled = true;
                 BtnExit.BackColor = Color.FromArgb(40, 40, 40);
-                Utilities.PrintLog(LogBox, "Stop automatic inspection...");
+                Utilities.PrintLog(LogList, "Stop automatic inspection...");
                 return;
             }
             else
@@ -258,7 +208,7 @@ namespace VisionSystem
                 BtnSetup.BackColor = Color.Red;
                 BtnExit.Enabled = false;
                 BtnExit.BackColor = Color.Red;
-                Utilities.PrintLog(LogBox, "Start automatic inspection...");
+                Utilities.PrintLog(LogList, "Start automatic inspection...");
 
                 Thread InspThread = new Thread(() =>
                 {
@@ -275,7 +225,7 @@ namespace VisionSystem
                             BtnExit.Invoke(new Action(() => BtnExit.Enabled = true));
                             BtnExit.Invoke(new Action(() => BtnExit.BackColor = Color.FromArgb(40, 40, 40)));
 
-                            LogBox.Invoke(new Action(() => Utilities.PrintLog(LogBox, "Automatic inspection completed!!")));
+                            LogList.Invoke(new Action(() => Utilities.PrintLog(LogList, "Automatic inspection completed!!")));
                         }
                     }
                     
@@ -314,7 +264,7 @@ namespace VisionSystem
 
             count++;
 
-            DisplayClear(Display);
+            Utilities.DisplayClear(Display);
 
             if (!PMAlign.Instance.PatternRun(Display, Pattern.PPattern, Region.PRegion, Pattern.PAngle, Pattern.PThreshold, null)) return;
             if (!PMAlign.Instance.PatternRun(Display, Pattern.APattern, Region.ARegion, Pattern.AAngle, Pattern.AThreshold, null)) return;
@@ -377,14 +327,14 @@ namespace VisionSystem
                 switch (toolName)
                 {
                     case "Point":
-                        Pattern.PTrain = TrainPattern(TrainRegion, Pattern.PPattern);
+                        Pattern.PTrain = TrainRun(TrainRegion, Pattern.PPattern);
                         break;
                     case "Angle":
-                        Pattern.ATrain = TrainPattern(TrainRegion, Pattern.APattern);
+                        Pattern.ATrain = TrainRun(TrainRegion, Pattern.APattern);
                         break;
                 }
 
-                TManager.DisplayClear(SDisplay);
+                Utilities.DisplayClear(SDisplay);
 
                 string imagePath = Path.Combine(Application.StartupPath, "Image");
                 Directory.CreateDirectory(imagePath);
@@ -402,7 +352,7 @@ namespace VisionSystem
             /// 패턴 학습
             /// </summary>
             /// <param name="TrainRegion">트레인 할 형상의 영역</param>
-            public bool TrainPattern(CogRectangleAffine TrainRegion, CogPMAlignTool PMAlignTool)
+            public bool TrainRun(CogRectangleAffine TrainRegion, CogPMAlignTool PMAlignTool)
             {
                 if (Pattern.InputImage == null) return false;
 
@@ -435,20 +385,20 @@ namespace VisionSystem
             /// <param name="SearchRegion">서치 영역</param>
             /// <param name="angle">각도</param>
             /// <param name="threshold">임계치</param>
-            /// <param name="LogBox">출력 할 로그 창</param>
-            public bool PatternRun(CogRecordDisplay Display, CogPMAlignTool PMAlignTool, CogRectangleAffine SearchRegion, double angle, double threshold, string mode, ListBox LogBox = null)
+            /// <param name="LogList">출력 할 로그 창</param>
+            public bool PatternRun(CogRecordDisplay Display, CogPMAlignTool PMAlignTool, CogRectangleAffine SearchRegion, double angle, double threshold, string mode, ListBox LogList = null)
             {
-                if (mode == "Run") TManager.DisplayClear(Display);
+                if (mode == "Run") Utilities.DisplayClear(Display);
 
                 if (Display.Image == null)
                 {
-                    if (LogBox != null) Utilities.PrintLog(LogBox, "There is no image.");
+                    if (LogList != null) Utilities.PrintLog(LogList, "There is no image.");
                     return false;
                 }
 
                 if (!PMAlignTool.Pattern.Trained)
                 {
-                    if (LogBox != null) Utilities.PrintLog(LogBox, "There are no registered patterns.");
+                    if (LogList != null) Utilities.PrintLog(LogList, "There are no registered patterns.");
                     return false;
                 } 
 
@@ -496,10 +446,10 @@ namespace VisionSystem
                 switch (mode)
                 {
                     case "Run":
-                        Utilities.PrintLog(LogBox, "Pattern run complete!");
+                        Utilities.PrintLog(LogList, "Pattern run complete!");
                         break;
                     case "ManualRun":
-                        Utilities.PrintLog(LogBox, "Manual run complete!");
+                        Utilities.PrintLog(LogList, "Manual run complete!");
                         break;
                     default:
                         break;

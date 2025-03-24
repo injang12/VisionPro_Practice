@@ -63,9 +63,9 @@ namespace VisionSystem
         /// <summary>
         /// 자동 검사에 사용 할 이미지 폴더 지정
         /// </summary>
-        /// <param name="LogBox">로그 창 지정</param>
+        /// <param name="LogList">로그 창 지정</param>
         /// <param name="isSetup">셋업 창, 메인 창 구분</param>
-        public void SpecifyFolder(ListBox LogBox, bool isSetup)
+        public void SpecifyFolder(ListBox LogList, bool isSetup)
         {
             List<string> FileName = new List<string>();
 
@@ -79,7 +79,7 @@ namespace VisionSystem
 
                     if (string.IsNullOrEmpty(folderPath))
                     {
-                        Utilities.PrintLog(LogBox, "Failed to specify folder...");
+                        Utilities.PrintLog(LogList, "Failed to specify folder...");
                         return;
                     }
 
@@ -97,11 +97,11 @@ namespace VisionSystem
                     if (FileName.Count > 0)
                     {
                         imageIndex = 0;
-                        Utilities.PrintLog(LogBox, $"Directory specified successfully! {FileName.Count} images found.");
+                        Utilities.PrintLog(LogList, $"Directory specified successfully! {FileName.Count} images found.");
                     }
-                    else Utilities.PrintLog(LogBox, "No valid image files found in the selected folder.");
+                    else Utilities.PrintLog(LogList, "No valid image files found in the selected folder.");
                 }
-                else Utilities.PrintLog(LogBox, "Failed to specify folder...");
+                else Utilities.PrintLog(LogList, "Failed to specify folder...");
             }
         }
 
@@ -109,11 +109,11 @@ namespace VisionSystem
         /// 지정한 이미지 폴더 다음 이미지 넘기기
         /// </summary>
         /// <returns>string</returns>
-        public string NextImage(ListBox LogBox)
+        public string NextImage(ListBox LogList)
         {
             if (SetupImageFileName.Count == 0)
             {
-                Utilities.PrintLog(LogBox, "The specified folder does not exist...");
+                Utilities.PrintLog(LogList, "The specified folder does not exist...");
                 return null;
             }
 
@@ -127,11 +127,11 @@ namespace VisionSystem
         /// 지정한 이미지 폴더 이전 이미지 넘기기
         /// </summary>
         /// <returns>string</returns>
-        public string PreImage(ListBox LogBox)
+        public string PreImage(ListBox LogList)
         {
             if (SetupImageFileName.Count == 0)
             {
-                Utilities.PrintLog(LogBox, "The specified folder does not exist...");
+                Utilities.PrintLog(LogList, "The specified folder does not exist...");
                 return null;
             }
 
@@ -232,8 +232,8 @@ namespace VisionSystem
         /// 이미지 로드
         /// </summary>
         /// <param name="Display">출력할 디스플레이</param>
-        /// /// <param name="LogBox">로그 창</param>
-        public void Load_Image(CogRecordDisplay Display, ListBox LogBox)
+        /// /// <param name="LogList">로그 창</param>
+        public void Load_Image(CogRecordDisplay Display, ListBox LogList)
         {
             using (OpenFileDialog dlg = new OpenFileDialog())
             {
@@ -247,7 +247,7 @@ namespace VisionSystem
                     ImageFileTool.Operator.Open(@dlg.FileName, CogImageFileModeConstants.Read);
                     ImageFileTool.Run();
 
-                    ToolManager.Instance.DisplayClear(Display);
+                    Utilities.DisplayClear(Display);
 
                     ICogImage Image = null;
 
@@ -259,7 +259,7 @@ namespace VisionSystem
 
                     ImageFileTool.Operator.Close();
                 }
-                Utilities.PrintLog(LogBox, "Image Load Successful!");
+                Utilities.PrintLog(LogList, "Image Load Successful!");
             }
         }
 
@@ -270,7 +270,7 @@ namespace VisionSystem
                 ImageFileTool.Operator.Open(@Path.Combine(Application.StartupPath, "Image", $"{name}.bmp"), CogImageFileModeConstants.Read);
                 ImageFileTool.Run();
 
-                ToolManager.Instance.DisplayClear(Display);
+                Utilities.DisplayClear(Display);
                 Display.Image = ImageFileTool.OutputImage;
 
                 ImageFileTool.Operator.Close();
@@ -280,7 +280,7 @@ namespace VisionSystem
         /// <summary>
         /// 파라미터 저장
         /// </summary>
-        public void ParamSave(ListBox LogBox)
+        public void ParamSave(ListBox LogList)
         {
             if (MessageBox.Show("Do you want to save it?", "Caution", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
 
@@ -330,7 +330,7 @@ namespace VisionSystem
             WriteValue("Train", "Point", Pattern.PTrain.ToString());
             WriteValue("Train", "Angle", Pattern.ATrain.ToString());
 
-            Utilities.PrintLog(LogBox, "Successfully saved parameters.");
+            Utilities.PrintLog(LogList, "Successfully saved parameters.");
         }
 
         /// <summary>
@@ -386,7 +386,7 @@ namespace VisionSystem
                     Image = CogImageConvert.GetIntensityImage(Image, 0, 0, Image.Width, Image.Height);
 
                 Pattern.InputImage = Image;
-                ToolManager.PMAlign.Instance.TrainPattern(DataStore.Region.Instance.PTrainRegion, DataStore.Pattern.Instance.PPattern);
+                ToolManager.PMAlign.Instance.TrainRun(DataStore.Region.Instance.PTrainRegion, DataStore.Pattern.Instance.PPattern);
             }
             if (Pattern.ATrain)
             {
@@ -397,7 +397,7 @@ namespace VisionSystem
                     Image = CogImageConvert.GetIntensityImage(Image, 0, 0, Image.Width, Image.Height);
 
                 Pattern.InputImage = Image;
-                ToolManager.PMAlign.Instance.TrainPattern(DataStore.Region.Instance.ATrainRegion, DataStore.Pattern.Instance.APattern);
+                ToolManager.PMAlign.Instance.TrainRun(DataStore.Region.Instance.ATrainRegion, DataStore.Pattern.Instance.APattern);
             }
         }
     }

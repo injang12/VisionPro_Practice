@@ -49,7 +49,7 @@
             this.ChkPoint = new System.Windows.Forms.CheckBox();
             this.ChkAngle = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.PointPatternGroup = new System.Windows.Forms.GroupBox();
+            this.PGroup = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.PDisplay = new Cognex.VisionPro.CogRecordDisplay();
@@ -64,7 +64,7 @@
             this.NumPThreshold = new System.Windows.Forms.NumericUpDown();
             this.BtnPRun = new System.Windows.Forms.Button();
             this.BtnPRegion = new System.Windows.Forms.Button();
-            this.AnglePatternGroup = new System.Windows.Forms.GroupBox();
+            this.AGroup = new System.Windows.Forms.GroupBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.ADisplay = new Cognex.VisionPro.CogRecordDisplay();
             this.label8 = new System.Windows.Forms.Label();
@@ -88,12 +88,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.SDisplay)).BeginInit();
             this.panel3.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.PointPatternGroup.SuspendLayout();
+            this.PGroup.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumPAngle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumPThreshold)).BeginInit();
-            this.AnglePatternGroup.SuspendLayout();
+            this.AGroup.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ADisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumAAngle)).BeginInit();
@@ -319,7 +319,7 @@
             this.ChkPoint.TabIndex = 9;
             this.ChkPoint.Text = "PointPattern";
             this.ChkPoint.UseVisualStyleBackColor = true;
-            this.ChkPoint.CheckedChanged += new System.EventHandler(this.ChkBox_CheckedChanged);
+            this.ChkPoint.CheckedChanged += new System.EventHandler(this.ChkBox_Check);
             // 
             // ChkAngle
             // 
@@ -331,7 +331,7 @@
             this.ChkAngle.TabIndex = 11;
             this.ChkAngle.Text = "AnglePattern";
             this.ChkAngle.UseVisualStyleBackColor = true;
-            this.ChkAngle.CheckedChanged += new System.EventHandler(this.ChkBox_CheckedChanged);
+            this.ChkAngle.CheckedChanged += new System.EventHandler(this.ChkBox_Check);
             // 
             // groupBox1
             // 
@@ -343,31 +343,31 @@
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
             // 
-            // PointPatternGroup
+            // PGroup
             // 
-            this.PointPatternGroup.Controls.Add(this.label10);
-            this.PointPatternGroup.Controls.Add(this.panel1);
-            this.PointPatternGroup.Controls.Add(this.label1);
-            this.PointPatternGroup.Controls.Add(this.BtnPTrainRegion);
-            this.PointPatternGroup.Controls.Add(this.BtnPTrain);
-            this.PointPatternGroup.Controls.Add(this.groupBox2);
-            this.PointPatternGroup.Controls.Add(this.label9);
-            this.PointPatternGroup.Controls.Add(this.label4);
-            this.PointPatternGroup.Controls.Add(this.NumPAngle);
-            this.PointPatternGroup.Controls.Add(this.label3);
-            this.PointPatternGroup.Controls.Add(this.NumPThreshold);
-            this.PointPatternGroup.Controls.Add(this.BtnPRun);
-            this.PointPatternGroup.Controls.Add(this.BtnPRegion);
-            this.PointPatternGroup.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.PointPatternGroup.Location = new System.Drawing.Point(38, 24);
-            this.PointPatternGroup.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.PointPatternGroup.Name = "PointPatternGroup";
-            this.PointPatternGroup.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.PointPatternGroup.Size = new System.Drawing.Size(508, 268);
-            this.PointPatternGroup.TabIndex = 15;
-            this.PointPatternGroup.TabStop = false;
-            this.PointPatternGroup.Text = "Point Pattern";
-            this.PointPatternGroup.Visible = false;
+            this.PGroup.Controls.Add(this.label10);
+            this.PGroup.Controls.Add(this.panel1);
+            this.PGroup.Controls.Add(this.label1);
+            this.PGroup.Controls.Add(this.BtnPTrainRegion);
+            this.PGroup.Controls.Add(this.BtnPTrain);
+            this.PGroup.Controls.Add(this.groupBox2);
+            this.PGroup.Controls.Add(this.label9);
+            this.PGroup.Controls.Add(this.label4);
+            this.PGroup.Controls.Add(this.NumPAngle);
+            this.PGroup.Controls.Add(this.label3);
+            this.PGroup.Controls.Add(this.NumPThreshold);
+            this.PGroup.Controls.Add(this.BtnPRun);
+            this.PGroup.Controls.Add(this.BtnPRegion);
+            this.PGroup.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.PGroup.Location = new System.Drawing.Point(38, 24);
+            this.PGroup.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.PGroup.Name = "PGroup";
+            this.PGroup.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.PGroup.Size = new System.Drawing.Size(508, 268);
+            this.PGroup.TabIndex = 15;
+            this.PGroup.TabStop = false;
+            this.PGroup.Text = "Point Pattern";
+            this.PGroup.Visible = false;
             // 
             // label10
             // 
@@ -564,31 +564,31 @@
             this.BtnPRegion.UseVisualStyleBackColor = false;
             this.BtnPRegion.Click += new System.EventHandler(this.BtnRegion_Click);
             // 
-            // AnglePatternGroup
+            // AGroup
             // 
-            this.AnglePatternGroup.Controls.Add(this.panel2);
-            this.AnglePatternGroup.Controls.Add(this.label8);
-            this.AnglePatternGroup.Controls.Add(this.BtnATrainRegion);
-            this.AnglePatternGroup.Controls.Add(this.BtnATrain);
-            this.AnglePatternGroup.Controls.Add(this.label11);
-            this.AnglePatternGroup.Controls.Add(this.groupBox3);
-            this.AnglePatternGroup.Controls.Add(this.label12);
-            this.AnglePatternGroup.Controls.Add(this.label5);
-            this.AnglePatternGroup.Controls.Add(this.NumAAngle);
-            this.AnglePatternGroup.Controls.Add(this.label6);
-            this.AnglePatternGroup.Controls.Add(this.NumAThreshold);
-            this.AnglePatternGroup.Controls.Add(this.BtnARun);
-            this.AnglePatternGroup.Controls.Add(this.BtnARegion);
-            this.AnglePatternGroup.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.AnglePatternGroup.Location = new System.Drawing.Point(38, 296);
-            this.AnglePatternGroup.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.AnglePatternGroup.Name = "AnglePatternGroup";
-            this.AnglePatternGroup.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.AnglePatternGroup.Size = new System.Drawing.Size(508, 268);
-            this.AnglePatternGroup.TabIndex = 16;
-            this.AnglePatternGroup.TabStop = false;
-            this.AnglePatternGroup.Text = "Angle Pattern";
-            this.AnglePatternGroup.Visible = false;
+            this.AGroup.Controls.Add(this.panel2);
+            this.AGroup.Controls.Add(this.label8);
+            this.AGroup.Controls.Add(this.BtnATrainRegion);
+            this.AGroup.Controls.Add(this.BtnATrain);
+            this.AGroup.Controls.Add(this.label11);
+            this.AGroup.Controls.Add(this.groupBox3);
+            this.AGroup.Controls.Add(this.label12);
+            this.AGroup.Controls.Add(this.label5);
+            this.AGroup.Controls.Add(this.NumAAngle);
+            this.AGroup.Controls.Add(this.label6);
+            this.AGroup.Controls.Add(this.NumAThreshold);
+            this.AGroup.Controls.Add(this.BtnARun);
+            this.AGroup.Controls.Add(this.BtnARegion);
+            this.AGroup.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.AGroup.Location = new System.Drawing.Point(38, 296);
+            this.AGroup.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.AGroup.Name = "AGroup";
+            this.AGroup.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.AGroup.Size = new System.Drawing.Size(508, 268);
+            this.AGroup.TabIndex = 16;
+            this.AGroup.TabStop = false;
+            this.AGroup.Text = "Angle Pattern";
+            this.AGroup.Visible = false;
             // 
             // panel2
             // 
@@ -787,8 +787,8 @@
             // 
             // PnlPattern
             // 
-            this.PnlPattern.Controls.Add(this.PointPatternGroup);
-            this.PnlPattern.Controls.Add(this.AnglePatternGroup);
+            this.PnlPattern.Controls.Add(this.PGroup);
+            this.PnlPattern.Controls.Add(this.AGroup);
             this.PnlPattern.Location = new System.Drawing.Point(1047, 191);
             this.PnlPattern.Name = "PnlPattern";
             this.PnlPattern.Size = new System.Drawing.Size(621, 427);
@@ -822,14 +822,14 @@
             this.panel3.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.PointPatternGroup.ResumeLayout(false);
-            this.PointPatternGroup.PerformLayout();
+            this.PGroup.ResumeLayout(false);
+            this.PGroup.PerformLayout();
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PDisplay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumPAngle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumPThreshold)).EndInit();
-            this.AnglePatternGroup.ResumeLayout(false);
-            this.AnglePatternGroup.PerformLayout();
+            this.AGroup.ResumeLayout(false);
+            this.AGroup.PerformLayout();
             this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ADisplay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumAAngle)).EndInit();
@@ -861,7 +861,7 @@
         private System.Windows.Forms.CheckBox ChkPoint;
         private System.Windows.Forms.CheckBox ChkAngle;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox PointPatternGroup;
+        private System.Windows.Forms.GroupBox PGroup;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Panel panel1;
         public Cognex.VisionPro.CogRecordDisplay PDisplay;
@@ -876,7 +876,7 @@
         private System.Windows.Forms.NumericUpDown NumPThreshold;
         private System.Windows.Forms.Button BtnPRun;
         private System.Windows.Forms.Button BtnPRegion;
-        private System.Windows.Forms.GroupBox AnglePatternGroup;
+        private System.Windows.Forms.GroupBox AGroup;
         private System.Windows.Forms.Panel panel2;
         public Cognex.VisionPro.CogRecordDisplay ADisplay;
         private System.Windows.Forms.Label label8;

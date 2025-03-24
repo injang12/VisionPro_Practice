@@ -19,12 +19,12 @@ namespace VisionSystem
         void BtnSave_Click(object sender, System.EventArgs e) => FManager.ParamSave(LogList);
         void BtnExit_Click(object sender, System.EventArgs e) => this.Hide();
         void SetupDisplay_DoubleClick(object sender, System.EventArgs e) => FManager.Load_Image(SDisplay, LogList);
-        void Numeric_ValueChanged(object sender, System.EventArgs e) => TManager.NumericValueChange((NumericUpDown)sender);
+        void Numeric_ValueChanged(object sender, System.EventArgs e) => Utilities.ValueChange((NumericUpDown)sender);
         void BtnRegion_Click(object sender, System.EventArgs e) => TManager.InitRegion(SDisplay, (Button)sender);
         void BtnTrain_Click(object sender, System.EventArgs e) => PMAlign.PatternTrain(SDisplay, PDisplay, ADisplay, LogList, (Button)sender);
         void BtnARun_Click(object sender, System.EventArgs e) => PMAlign.PatternRun(SDisplay, Pattern.APattern, Region.ARegion, Pattern.AAngle, Pattern.AThreshold, "Run", LogList);
         void BtnPRun_Click(object sender, System.EventArgs e) => PMAlign.PatternRun(SDisplay, Pattern.PPattern, Region.PRegion, Pattern.PAngle, Pattern.PThreshold, "Run", LogList);
         void BtnManualRun_Click(object sender, System.EventArgs e) => TManager.RunManual(SDisplay, LogList);
-        void ChkBox_CheckedChanged(object sender, System.EventArgs e) => Utilities.SelectedCheckBox(SDisplay, (CheckBox)sender, ChkAngle, ChkPoint, PointPatternGroup, AnglePatternGroup);
+        void ChkBox_Check(object sender, System.EventArgs e) => Utilities.SelectedCheckBox(SDisplay, (CheckBox)sender, ChkAngle, ChkPoint, PGroup, AGroup);
     }
 }
