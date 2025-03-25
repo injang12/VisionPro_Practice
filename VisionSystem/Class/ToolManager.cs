@@ -1,6 +1,5 @@
 ﻿using Cognex.VisionPro;
 using Cognex.VisionPro.PMAlign;
-using Cognex.VisionPro.Dimensioning;
 
 using System;
 using System.IO;
@@ -23,131 +22,6 @@ namespace VisionSystem
         int count = 0;              // 자동 검사 이미지 카운팅
 
         /// <summary>
-        /// 영역 생성
-        /// </summary>
-        /// <param name="Display">출력 할 디스플레이</param>
-        /// <param name="SelectedBtn">선택한 버튼</param>
-        public void InitRegion(CogRecordDisplay Display, Button SelectedBtn)
-        {
-            Utilities.DisplayClear(Display);
-
-            CogRectangleAffine SearchRegion;
-
-            switch (SelectedBtn.Name)
-            {
-                case "BtnPTrainRegion":
-                    SearchRegion = Region.PTrainRegion;
-                    break;
-                case "BtnPRegion":
-                    SearchRegion = Region.PRegion;
-                    break;
-                case "BtnATrainRegion":
-                    SearchRegion = Region.ATrainRegion;
-                    break;
-                case "BtnARegion":
-                    SearchRegion = Region.ARegion;
-                    break;
-                default:
-                    return;
-            }
-
-            SearchRegion.GraphicDOFEnable = CogRectangleAffineDOFConstants.All;
-            SearchRegion.Interactive = true;
-            SearchRegion.Color = CogColorConstants.Cyan;
-            SearchRegion.SelectedColor = CogColorConstants.Blue;
-            SearchRegion.MouseCursor = CogStandardCursorConstants.ManipulableGraphic;
-
-            Display.InteractiveGraphics.Add(SearchRegion, null, true);
-        }
-
-        /// <summary>
-        /// 그래픽 라벨 생성
-        /// </summary>
-        /// <param name="Display">표시 할 디스플레이</param>
-        /// <param name="color">폰트 색상</param>
-        /// <param name="font">폰트 두께</param>
-        /// <param name="text">텍스트</param>
-        /// <param name="x">좌표 X</param>
-        /// <param name="y">좌표 Y</param>
-        /// <param name="backColor">배경 색(투명 생략 가능)</param>
-        void CreateLabel(CogRecordDisplay Display, CogColorConstants color, Font font, string text, double x, double y, CogColorConstants backColor = CogColorConstants.None)
-        {
-            CogGraphicLabel Label = new CogGraphicLabel
-            {
-                Text = text,
-                X = x,
-                Y = y,
-                Color = color,
-                Font = font
-            };
-
-            if (backColor != CogColorConstants.None) Label.BackgroundColor = backColor;
-
-            Display.StaticGraphics.Add(Label, null);
-            Label.Dispose();
-        }
-
-        /// <summary>
-        /// 두 점의 각도 구하기 및 그래픽 그리기
-        /// </summary>
-        /// <param name="Display">출력 할 디스플레이</param>
-        /// <param name="x1">점1의 x값</param>
-        /// <param name="y1">점1의 y값</param>
-        /// <param name="x2">점2의 x값</param>
-        /// <param name="y2">점2의 y값</param>
-        void PointToPointAngleAndGraphics(CogRecordDisplay Display, double x1, double y1, double x2, double y2)
-        {
-            // 벡터 방향 (dx, dy)
-            double dx = x2 - x1;
-            double dy = y2 - y1;
-
-            // 각도 계산
-            double thetaRad = Math.Atan2(dy, dx);
-
-            // 0°를 위쪽(↑)으로 변환 90° 빼기
-            double resultAngle = Utilities.RadianDegreeConvert("D", thetaRad) - 90;
-
-            // -180~180° 범위로 변환
-            if (resultAngle < -180) resultAngle += 360;
-            else if (resultAngle >= 360) resultAngle -= 360;
-
-            CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), $"Angle: {resultAngle:0.00}", x2 - 200, y2 + 100, CogColorConstants.Black);
-
-            ////////////////// 중앙 직선(CreateLine) 그리기 /////////////////////
-            CogCreateLineTool CreateLineTool = new CogCreateLineTool()
-            {
-                InputImage = Pattern.InputImage,
-                OutputColor = CogColorConstants.Yellow,
-                OutputLineWidthInScreenPixels = 3
-            };
-
-            CreateLineTool.Line.X = x2;
-            CreateLineTool.Line.Y = y2;
-            CreateLineTool.Line.Rotation = Utilities.RadianDegreeConvert("R", 90);
-
-            CreateLineTool.Run();
-
-            Display.StaticGraphics.Add(CreateLineTool.GetOutputLine(), null);
-
-            //////////////// 두 점의 직선(CreateSegment) 그리기 ///////////////////
-            CogCreateSegmentTool CreateSegmentTool = new CogCreateSegmentTool
-            {
-                InputImage = Pattern.InputImage,
-                OutputColor = CogColorConstants.Magenta,
-                OutputLineWidthInScreenPixels = 3
-            };
-
-            CreateSegmentTool.Segment.StartX = x2;
-            CreateSegmentTool.Segment.StartY = y2;
-            CreateSegmentTool.Segment.EndX = x1;
-            CreateSegmentTool.Segment.EndY = y1;
-
-            CreateSegmentTool.Run();
-
-            Display.StaticGraphics.Add(CreateSegmentTool.GetOutputSegment(), null);
-        }
-
-        /// <summary>
         /// 매뉴얼 런
         /// </summary>
         /// <param name="Display">지정 할 디스플레이</param>
@@ -164,7 +38,13 @@ namespace VisionSystem
             double x2 = Pattern.APattern.Results[0].GetPose().TranslationX;
             double y2 = Pattern.APattern.Results[0].GetPose().TranslationY;
 
-            PointToPointAngleAndGraphics(Display, x1, y1, x2, y2);
+            double resultAngle = Utilities.PointToPointAngleAndGraphics(x1, y1, x2, y2);
+
+            GraphicManager.CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), $"Angle: {resultAngle:0.00}", x2 - 200, y2 + 100, CogColorConstants.Black);
+
+            GraphicManager.CreateCenterLineGraphics(Display, x2, y2);
+
+            GraphicManager.CreateSegmentGraphics(Display, x1, y1, x2, y2);
         }
 
         /// <summary>
@@ -274,7 +154,13 @@ namespace VisionSystem
             double x2 = Pattern.APattern.Results[0].GetPose().TranslationX;
             double y2 = Pattern.APattern.Results[0].GetPose().TranslationY;
 
-            PointToPointAngleAndGraphics(Display, x1, y1, x2, y2);
+            double resultAngle = Utilities.PointToPointAngleAndGraphics(x1, y1, x2, y2);
+
+            GraphicManager.CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), $"Angle: {resultAngle:0.00}", x2 - 200, y2 + 100, CogColorConstants.Black);
+
+            GraphicManager.CreateCenterLineGraphics(Display, x2, y2);
+
+            GraphicManager.CreateSegmentGraphics(Display, x1, y1, x2, y2);
 
             double time = DataStore.Instance.InspDelay * 1000;
 
@@ -420,7 +306,7 @@ namespace VisionSystem
 
                     Display.StaticGraphics.Add(SearchRegion, "");
 
-                    TManager.CreateLabel(Display, CogColorConstants.Red, new Font("Segoe UI", 50f), "NG", 300, 200);
+                    GraphicManager.CreateLabel(Display, CogColorConstants.Red, new Font("Segoe UI", 50f), "NG", 300, 200);
 
                     return false;
                 }
@@ -435,13 +321,13 @@ namespace VisionSystem
                 string strScore = $"Score: {PMAlignTool.Results[0].Score * 100:0}";
                 string strPos = $"X: {PointX:0.00}, Y: {PointY:0.00}";
 
-                TManager.CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), strScore, PointX, PointY + 150, CogColorConstants.Black);
-                TManager.CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), strPos, PointX, PointY + 200, CogColorConstants.Black);
+                GraphicManager.CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), strScore, PointX, PointY + 150, CogColorConstants.Black);
+                GraphicManager.CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), strPos, PointX, PointY + 200, CogColorConstants.Black);
 
                 if (PMAlignTool.Results[0].Score > PMAlignTool.RunParams.AcceptThreshold)
-                    TManager.CreateLabel(Display, CogColorConstants.Green, new Font("Segoe UI", 50f), "OK", 300, 200);
+                    GraphicManager.CreateLabel(Display, CogColorConstants.Green, new Font("Segoe UI", 50f), "OK", 300, 200);
                 else
-                    TManager.CreateLabel(Display, CogColorConstants.Red, new Font("Segoe UI", 50f), "NG", 300, 200);
+                    GraphicManager.CreateLabel(Display, CogColorConstants.Red, new Font("Segoe UI", 50f), "NG", 300, 200);
 
                 switch (mode)
                 {

@@ -28,6 +28,33 @@ namespace VisionSystem
         }
 
         /// <summary>
+        /// 두 점의 각도 구하기 및 그래픽 그리기
+        /// </summary>
+        /// <param name="x1">점1의 x값</param>
+        /// <param name="y1">점1의 y값</param>
+        /// <param name="x2">점2의 x값</param>
+        /// <param name="y2">점2의 y값</param>
+        /// <returns>double</returns>
+        public static double PointToPointAngleAndGraphics(double x1, double y1, double x2, double y2)
+        {
+            // 벡터 방향 (dx, dy)
+            double dx = x2 - x1;
+            double dy = y2 - y1;
+
+            // 각도 계산
+            double thetaRad = Math.Atan2(dy, dx);
+
+            // 0°를 위쪽(↑)으로 변환 90° 빼기
+            double resultAngle = RadianDegreeConvert("D", thetaRad) - 90;
+
+            // -180~180° 범위로 변환
+            if (resultAngle < -180) resultAngle += 360;
+            else if (resultAngle >= 360) resultAngle -= 360;
+
+            return resultAngle;
+        }
+
+        /// <summary>
         /// 값 체인지
         /// </summary>
         /// <param name="Numeric">변경 할 컨트롤(Numeric)</param>
