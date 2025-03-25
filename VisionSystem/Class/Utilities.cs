@@ -19,10 +19,8 @@ namespace VisionSystem
         {
             convertName = convertName.ToLower();
 
-            if (convertName == "r")
-                return currentValue * (Math.PI / 180);
-            else if (convertName == "d")
-                return currentValue * (180.0 / Math.PI);
+            if (convertName == "r") return currentValue * (Math.PI / 180);
+            else if (convertName == "d") return currentValue * (180.0 / Math.PI);
 
             throw new ArgumentException("Invalid conversion type. Please enter 'R' or 'D'.");
         }
@@ -63,16 +61,16 @@ namespace VisionSystem
             switch (Numeric.Name)
             {
                 case "NumAAngle":
-                    DataStore.Pattern.Instance.AAngle = (double)Numeric.Value;
+                    DataStore.Pattern.AAngle = (double)Numeric.Value;
                     break;
                 case "NumAThreshold":
-                    DataStore.Pattern.Instance.AThreshold = (double)Numeric.Value;
+                    DataStore.Pattern.AThreshold = (double)Numeric.Value;
                     break;
                 case "NumPAngle":
-                    DataStore.Pattern.Instance.PAngle = (double)Numeric.Value;
+                    DataStore.Pattern.PAngle = (double)Numeric.Value;
                     break;
                 case "NumPThreshold":
-                    DataStore.Pattern.Instance.PThreshold = (double)Numeric.Value;
+                    DataStore.Pattern.PThreshold = (double)Numeric.Value;
                     break;
             }
         }

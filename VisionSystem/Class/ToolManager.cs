@@ -12,8 +12,6 @@ namespace VisionSystem
     internal class ToolManager
     {
         public static ToolManager Instance { get; private set; } = new ToolManager();
-        readonly DataStore.Pattern Pattern = DataStore.Pattern.Instance;
-        readonly DataStore.Region Region = DataStore.Region.Instance;
         readonly FileManager FManager = FileManager.Instance;
 
         bool isStart = false;       // 자동 검사 시작 체크
@@ -30,13 +28,13 @@ namespace VisionSystem
         {
             Utilities.DisplayClear(Display);
 
-            if (!PMAlign.Instance.PatternRun(Display, Pattern.PPattern, Region.PRegion, Pattern.PAngle, Pattern.PThreshold, "", LogList)) return;
-            if (!PMAlign.Instance.PatternRun(Display, Pattern.APattern, Region.ARegion, Pattern.AAngle, Pattern.AThreshold, "ManualRun", LogList)) return;
+            if (!PMAlign.Instance.PatternRun(Display, DataStore.Pattern.PPattern, DataStore.Region.PRegion, DataStore.Pattern.PAngle, DataStore.Pattern.PThreshold, "", LogList)) return;
+            if (!PMAlign.Instance.PatternRun(Display, DataStore.Pattern.APattern, DataStore.Region.ARegion, DataStore.Pattern.AAngle, DataStore.Pattern.AThreshold, "ManualRun", LogList)) return;
 
-            double x1 = Pattern.PPattern.Results[0].GetPose().TranslationX;
-            double y1 = Pattern.PPattern.Results[0].GetPose().TranslationY;
-            double x2 = Pattern.APattern.Results[0].GetPose().TranslationX;
-            double y2 = Pattern.APattern.Results[0].GetPose().TranslationY;
+            double x1 = DataStore.Pattern.PPattern.Results[0].GetPose().TranslationX;
+            double y1 = DataStore.Pattern.PPattern.Results[0].GetPose().TranslationY;
+            double x2 = DataStore.Pattern.APattern.Results[0].GetPose().TranslationX;
+            double y2 = DataStore.Pattern.APattern.Results[0].GetPose().TranslationY;
 
             double resultAngle = Utilities.PointToPointAngleAndGraphics(x1, y1, x2, y2);
 
@@ -140,19 +138,19 @@ namespace VisionSystem
                 image = CogImageConvert.GetIntensityImage(image, 0, 0, image.Width, image.Height);
 
             Display.Image = image;
-            Pattern.InputImage = image;
+            DataStore.Pattern.InputImage = image;
 
             count++;
 
             Utilities.DisplayClear(Display);
 
-            if (!PMAlign.Instance.PatternRun(Display, Pattern.PPattern, Region.PRegion, Pattern.PAngle, Pattern.PThreshold, null)) return;
-            if (!PMAlign.Instance.PatternRun(Display, Pattern.APattern, Region.ARegion, Pattern.AAngle, Pattern.AThreshold, null)) return;
+            if (!PMAlign.Instance.PatternRun(Display, DataStore.Pattern.PPattern, DataStore.Region.PRegion, DataStore.Pattern.PAngle, DataStore.Pattern.PThreshold, null)) return;
+            if (!PMAlign.Instance.PatternRun(Display, DataStore.Pattern.APattern, DataStore.Region.ARegion, DataStore.Pattern.AAngle, DataStore.Pattern.AThreshold, null)) return;
 
-            double x1 = Pattern.PPattern.Results[0].GetPose().TranslationX;
-            double y1 = Pattern.PPattern.Results[0].GetPose().TranslationY;
-            double x2 = Pattern.APattern.Results[0].GetPose().TranslationX;
-            double y2 = Pattern.APattern.Results[0].GetPose().TranslationY;
+            double x1 = DataStore.Pattern.PPattern.Results[0].GetPose().TranslationX;
+            double y1 = DataStore.Pattern.PPattern.Results[0].GetPose().TranslationY;
+            double x2 = DataStore.Pattern.APattern.Results[0].GetPose().TranslationX;
+            double y2 = DataStore.Pattern.APattern.Results[0].GetPose().TranslationY;
 
             double resultAngle = Utilities.PointToPointAngleAndGraphics(x1, y1, x2, y2);
 
@@ -162,7 +160,7 @@ namespace VisionSystem
 
             GraphicManager.CreateSegmentGraphics(Display, x1, y1, x2, y2);
 
-            double time = DataStore.Instance.InspDelay * 1000;
+            double time = DataStore.InspDelay * 1000;
 
             Thread.Sleep((int)time);      /* 검사 속도 조절 */
         }
@@ -170,9 +168,6 @@ namespace VisionSystem
         public class PMAlign
         {
             public static PMAlign Instance { get; private set; } = new PMAlign();
-            readonly DataStore.Pattern Pattern = DataStore.Pattern.Instance;
-            readonly DataStore.Region Region = DataStore.Region.Instance;
-            readonly ToolManager TManager = ToolManager.Instance;
             readonly FileManager FManager = FileManager.Instance;
             
             public void PatternTrain(CogRecordDisplay SDisplay, CogRecordDisplay PDisplay, CogRecordDisplay ADisplay, ListBox LogList, Button BtnTrain)
@@ -192,14 +187,14 @@ namespace VisionSystem
                 {
                     case "BtnPTrain":
                         Display = PDisplay;
-                        TrainRegion = Region.PTrainRegion;
-                        overwriteCheck = Pattern.PTrain;
+                        TrainRegion = DataStore.Region.PTrainRegion;
+                        overwriteCheck = DataStore.Pattern.PTrain;
                         toolName = "Point";
                         break;
                     case "BtnATrain":
                         Display = ADisplay;
-                        TrainRegion = Region.ATrainRegion;
-                        overwriteCheck = Pattern.ATrain;
+                        TrainRegion = DataStore.Region.ATrainRegion;
+                        overwriteCheck = DataStore.Pattern.ATrain;
                         toolName = "Angle";
                         break;
                     default:
@@ -213,10 +208,10 @@ namespace VisionSystem
                 switch (toolName)
                 {
                     case "Point":
-                        Pattern.PTrain = TrainRun(TrainRegion, Pattern.PPattern);
+                        DataStore.Pattern.PTrain = TrainRun(TrainRegion, DataStore.Pattern.PPattern);
                         break;
                     case "Angle":
-                        Pattern.ATrain = TrainRun(TrainRegion, Pattern.APattern);
+                        DataStore.Pattern.ATrain = TrainRun(TrainRegion, DataStore.Pattern.APattern);
                         break;
                 }
 
@@ -225,10 +220,9 @@ namespace VisionSystem
                 string imagePath = Path.Combine(Application.StartupPath, "Image");
                 Directory.CreateDirectory(imagePath);
 
-                Display.Image = Pattern.TrainImage;
+                Display.Image = DataStore.Pattern.TrainImage;
 
                 FManager.Save_ImageFile(Path.Combine(imagePath, $"{toolName}.bmp"), Display.Image);
-                FManager.Save_ImageFile(Path.Combine(imagePath, $"{toolName}Mask.bmp"), Pattern.MaskImage);
                 FManager.Save_ImageFile(Path.Combine(imagePath, "MasterImage.bmp"), SDisplay.Image);
 
                 Utilities.PrintLog(LogList, "Image Train and Save Complete!");
@@ -240,20 +234,18 @@ namespace VisionSystem
             /// <param name="TrainRegion">트레인 할 형상의 영역</param>
             public bool TrainRun(CogRectangleAffine TrainRegion, CogPMAlignTool PMAlignTool)
             {
-                if (Pattern.InputImage == null) return false;
+                if (DataStore.Pattern.InputImage == null) return false;
 
                 try
                 {
-                    PMAlignTool.Pattern.TrainImage = Pattern.InputImage;
+                    PMAlignTool.Pattern.TrainImage = DataStore.Pattern.InputImage;
                     PMAlignTool.Pattern.TrainRegion = TrainRegion;
                     PMAlignTool.Pattern.Origin.TranslationX = TrainRegion.CenterX;
                     PMAlignTool.Pattern.Origin.TranslationY = TrainRegion.CenterY;
 
                     PMAlignTool.Pattern.Train();
 
-                    Pattern.MaskImage = PMAlignTool.Pattern.GetTrainedPatternImageMask();
-
-                    Pattern.TrainImage = PMAlignTool.Pattern.GetTrainedPatternImage();
+                    DataStore.Pattern.TrainImage = PMAlignTool.Pattern.GetTrainedPatternImage();
 
                     return true;
                 }
@@ -288,7 +280,7 @@ namespace VisionSystem
                     return false;
                 } 
 
-                PMAlignTool.InputImage = Pattern.InputImage;
+                PMAlignTool.InputImage = DataStore.Pattern.InputImage;
 
                 PMAlignTool.RunParams.ZoneAngle.Configuration = CogPMAlignZoneConstants.LowHigh;
                 PMAlignTool.RunParams.ZoneAngle.Low = CogMisc.DegToRad(-angle);

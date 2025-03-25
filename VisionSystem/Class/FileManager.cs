@@ -24,8 +24,6 @@ namespace VisionSystem
         [DllImport("kernel32")]
         static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
 
-        readonly DataStore.Pattern Pattern = DataStore.Pattern.Instance;
-        readonly DataStore.Region Region = DataStore.Region.Instance;
         string str_INIPath;
 
         /// <summary>
@@ -177,7 +175,7 @@ namespace VisionSystem
                 image = CogImageConvert.GetIntensityImage(image, 0, 0, image.Width, image.Height);
 
             Display.Image = image;
-            Pattern.InputImage = image;
+            DataStore.Pattern.InputImage = image;
 
             ToolManager.Instance.RunManual(Display, LogList);
             CurrentImage.Text = Path.GetFileName(SetupImageFileName[imageIndex]);
@@ -255,7 +253,7 @@ namespace VisionSystem
                         Image = CogImageConvert.GetIntensityImage(ImageFileTool.OutputImage, 0, 0, ImageFileTool.OutputImage.Width, ImageFileTool.OutputImage.Height);
 
                     Display.Image = Image;
-                    Pattern.InputImage = Display.Image;
+                    DataStore.Pattern.InputImage = Display.Image;
 
                     ImageFileTool.Operator.Close();
                 }
@@ -297,38 +295,38 @@ namespace VisionSystem
             }
             Set_INI_Path(path);
 
-            WriteValue("PPattern", "Threshold", Pattern.PThreshold.ToString());
-            WriteValue("PPattern", "Angle", Pattern.PAngle.ToString());
+            WriteValue("PPattern", "Threshold", DataStore.Pattern.PThreshold.ToString());
+            WriteValue("PPattern", "Angle", DataStore.Pattern.PAngle.ToString());
 
-            WriteValue("APattern", "Threshold", Pattern.AThreshold.ToString());
-            WriteValue("APattern", "Angle", Pattern.AAngle.ToString());
+            WriteValue("APattern", "Threshold", DataStore.Pattern.AThreshold.ToString());
+            WriteValue("APattern", "Angle", DataStore.Pattern.AAngle.ToString());
 
-            WriteValue("PTrain", "CenterX", Region.PTrainRegion.CenterX.ToString());
-            WriteValue("PTrain", "CenterY", Region.PTrainRegion.CenterY.ToString());
-            WriteValue("PTrain", "SideXLength", Region.PTrainRegion.SideXLength.ToString());
-            WriteValue("PTrain", "SideYLength", Region.PTrainRegion.SideYLength.ToString());
-            WriteValue("PTrain", "Rotation", Region.PTrainRegion.Rotation.ToString());
+            WriteValue("PTrain", "CenterX", DataStore.Region.PTrainRegion.CenterX.ToString());
+            WriteValue("PTrain", "CenterY", DataStore.Region.PTrainRegion.CenterY.ToString());
+            WriteValue("PTrain", "SideXLength", DataStore.Region.PTrainRegion.SideXLength.ToString());
+            WriteValue("PTrain", "SideYLength", DataStore.Region.PTrainRegion.SideYLength.ToString());
+            WriteValue("PTrain", "Rotation", DataStore.Region.PTrainRegion.Rotation.ToString());
 
-            WriteValue("PSearch", "CenterX", Region.PRegion.CenterX.ToString());
-            WriteValue("PSearch", "CenterY", Region.PRegion.CenterY.ToString());
-            WriteValue("PSearch", "SideXLength", Region.PRegion.SideXLength.ToString());
-            WriteValue("PSearch", "SideYLength", Region.PRegion.SideYLength.ToString());
-            WriteValue("PSearch", "Rotation", Region.PRegion.Rotation.ToString());
+            WriteValue("PSearch", "CenterX", DataStore.Region.PRegion.CenterX.ToString());
+            WriteValue("PSearch", "CenterY", DataStore.Region.PRegion.CenterY.ToString());
+            WriteValue("PSearch", "SideXLength", DataStore.Region.PRegion.SideXLength.ToString());
+            WriteValue("PSearch", "SideYLength", DataStore.Region.PRegion.SideYLength.ToString());
+            WriteValue("PSearch", "Rotation", DataStore.Region.PRegion.Rotation.ToString());
 
-            WriteValue("ATrain", "CenterX", Region.ATrainRegion.CenterX.ToString());
-            WriteValue("ATrain", "CenterY", Region.ATrainRegion.CenterY.ToString());
-            WriteValue("ATrain", "SideXLength", Region.ATrainRegion.SideXLength.ToString());
-            WriteValue("ATrain", "SideYLength", Region.ATrainRegion.SideYLength.ToString());
-            WriteValue("ATrain", "Rotation", Region.ATrainRegion.Rotation.ToString());
+            WriteValue("ATrain", "CenterX", DataStore.Region.ATrainRegion.CenterX.ToString());
+            WriteValue("ATrain", "CenterY", DataStore.Region.ATrainRegion.CenterY.ToString());
+            WriteValue("ATrain", "SideXLength", DataStore.Region.ATrainRegion.SideXLength.ToString());
+            WriteValue("ATrain", "SideYLength", DataStore.Region.ATrainRegion.SideYLength.ToString());
+            WriteValue("ATrain", "Rotation", DataStore.Region.ATrainRegion.Rotation.ToString());
 
-            WriteValue("ASearch", "CenterX", Region.ARegion.CenterX.ToString());
-            WriteValue("ASearch", "CenterY", Region.ARegion.CenterY.ToString());
-            WriteValue("ASearch", "SideXLength", Region.ARegion.SideXLength.ToString());
-            WriteValue("ASearch", "SideYLength", Region.ARegion.SideYLength.ToString());
-            WriteValue("ASearch", "Rotation", Region.ARegion.Rotation.ToString());
+            WriteValue("ASearch", "CenterX", DataStore.Region.ARegion.CenterX.ToString());
+            WriteValue("ASearch", "CenterY", DataStore.Region.ARegion.CenterY.ToString());
+            WriteValue("ASearch", "SideXLength", DataStore.Region.ARegion.SideXLength.ToString());
+            WriteValue("ASearch", "SideYLength", DataStore.Region.ARegion.SideYLength.ToString());
+            WriteValue("ASearch", "Rotation", DataStore.Region.ARegion.Rotation.ToString());
 
-            WriteValue("Train", "Point", Pattern.PTrain.ToString());
-            WriteValue("Train", "Angle", Pattern.ATrain.ToString());
+            WriteValue("Train", "Point", DataStore.Pattern.PTrain.ToString());
+            WriteValue("Train", "Angle", DataStore.Pattern.ATrain.ToString());
 
             Utilities.PrintLog(LogList, "Successfully saved parameters.");
         }
@@ -344,40 +342,40 @@ namespace VisionSystem
 
             Set_INI_Path(path);
 
-            Pattern.PThreshold = Convert.ToDouble(ReadValue("PPattern", "Threshold"));
-            Pattern.PAngle = Convert.ToDouble(ReadValue("PPattern", "Angle"));
+            DataStore.Pattern.PThreshold = Convert.ToDouble(ReadValue("PPattern", "Threshold"));
+            DataStore.Pattern.PAngle = Convert.ToDouble(ReadValue("PPattern", "Angle"));
 
-            Pattern.AThreshold = Convert.ToDouble(ReadValue("APattern", "Threshold"));
-            Pattern.AAngle = Convert.ToDouble(ReadValue("APattern", "Angle"));
+            DataStore.Pattern.AThreshold = Convert.ToDouble(ReadValue("APattern", "Threshold"));
+            DataStore.Pattern.AAngle = Convert.ToDouble(ReadValue("APattern", "Angle"));
 
-            Region.PTrainRegion.CenterX = Convert.ToDouble(ReadValue("PTrain", "CenterX"));
-            Region.PTrainRegion.CenterY = Convert.ToDouble(ReadValue("PTrain", "CenterY"));
-            Region.PTrainRegion.SideXLength = Convert.ToDouble(ReadValue("PTrain", "SideXLength"));
-            Region.PTrainRegion.SideYLength = Convert.ToDouble(ReadValue("PTrain", "SideYLength"));
-            Region.PTrainRegion.Rotation = Convert.ToDouble(ReadValue("PTrain", "Rotation"));
+            DataStore.Region.PTrainRegion.CenterX = Convert.ToDouble(ReadValue("PTrain", "CenterX"));
+            DataStore.Region.PTrainRegion.CenterY = Convert.ToDouble(ReadValue("PTrain", "CenterY"));
+            DataStore.Region.PTrainRegion.SideXLength = Convert.ToDouble(ReadValue("PTrain", "SideXLength"));
+            DataStore.Region.PTrainRegion.SideYLength = Convert.ToDouble(ReadValue("PTrain", "SideYLength"));
+            DataStore.Region.PTrainRegion.Rotation = Convert.ToDouble(ReadValue("PTrain", "Rotation"));
 
-            Region.PRegion.CenterX = Convert.ToDouble(ReadValue("PSearch", "CenterX"));
-            Region.PRegion.CenterY = Convert.ToDouble(ReadValue("PSearch", "CenterY"));
-            Region.PRegion.SideXLength = Convert.ToDouble(ReadValue("PSearch", "SideXLength"));
-            Region.PRegion.SideYLength = Convert.ToDouble(ReadValue("PSearch", "SideYLength"));
-            Region.PRegion.Rotation = Convert.ToDouble(ReadValue("PSearch", "Rotation"));
+            DataStore.Region.PRegion.CenterX = Convert.ToDouble(ReadValue("PSearch", "CenterX"));
+            DataStore.Region.PRegion.CenterY = Convert.ToDouble(ReadValue("PSearch", "CenterY"));
+            DataStore.Region.PRegion.SideXLength = Convert.ToDouble(ReadValue("PSearch", "SideXLength"));
+            DataStore.Region.PRegion.SideYLength = Convert.ToDouble(ReadValue("PSearch", "SideYLength"));
+            DataStore.Region.PRegion.Rotation = Convert.ToDouble(ReadValue("PSearch", "Rotation"));
 
-            Region.ATrainRegion.CenterX = Convert.ToDouble(ReadValue("ATrain", "CenterX"));
-            Region.ATrainRegion.CenterY = Convert.ToDouble(ReadValue("ATrain", "CenterY"));
-            Region.ATrainRegion.SideXLength = Convert.ToDouble(ReadValue("ATrain", "SideXLength"));
-            Region.ATrainRegion.SideYLength = Convert.ToDouble(ReadValue("ATrain", "SideYLength"));
-            Region.ATrainRegion.Rotation = Convert.ToDouble(ReadValue("ATrain", "Rotation"));
+            DataStore.Region.ATrainRegion.CenterX = Convert.ToDouble(ReadValue("ATrain", "CenterX"));
+            DataStore.Region.ATrainRegion.CenterY = Convert.ToDouble(ReadValue("ATrain", "CenterY"));
+            DataStore.Region.ATrainRegion.SideXLength = Convert.ToDouble(ReadValue("ATrain", "SideXLength"));
+            DataStore.Region.ATrainRegion.SideYLength = Convert.ToDouble(ReadValue("ATrain", "SideYLength"));
+            DataStore.Region.ATrainRegion.Rotation = Convert.ToDouble(ReadValue("ATrain", "Rotation"));
 
-            Region.ARegion.CenterX = Convert.ToDouble(ReadValue("ASearch", "CenterX"));
-            Region.ARegion.CenterY = Convert.ToDouble(ReadValue("ASearch", "CenterY"));
-            Region.ARegion.SideXLength = Convert.ToDouble(ReadValue("ASearch", "SideXLength"));
-            Region.ARegion.SideYLength = Convert.ToDouble(ReadValue("ASearch", "SideYLength"));
-            Region.ARegion.Rotation = Convert.ToDouble(ReadValue("ASearch", "Rotation"));
+            DataStore.Region.ARegion.CenterX = Convert.ToDouble(ReadValue("ASearch", "CenterX"));
+            DataStore.Region.ARegion.CenterY = Convert.ToDouble(ReadValue("ASearch", "CenterY"));
+            DataStore.Region.ARegion.SideXLength = Convert.ToDouble(ReadValue("ASearch", "SideXLength"));
+            DataStore.Region.ARegion.SideYLength = Convert.ToDouble(ReadValue("ASearch", "SideYLength"));
+            DataStore.Region.ARegion.Rotation = Convert.ToDouble(ReadValue("ASearch", "Rotation"));
 
-            Pattern.PTrain = Convert.ToBoolean(ReadValue("Train", "Point"));
-            Pattern.ATrain = Convert.ToBoolean(ReadValue("Train", "Angle"));
+            DataStore.Pattern.PTrain = Convert.ToBoolean(ReadValue("Train", "Point"));
+            DataStore.Pattern.ATrain = Convert.ToBoolean(ReadValue("Train", "Angle"));
 
-            if (Pattern.PTrain)
+            if (DataStore.Pattern.PTrain)
             {
                 Load_Image(SetupForm.Instance.PDisplay, "Point");
                 ICogImage Image = Load_ImageFile(Path.Combine(Application.StartupPath, "Image", "MasterImage.bmp"));
@@ -385,10 +383,10 @@ namespace VisionSystem
                 if (Image.ToString() == "Cognex.VisionPro.CogImage24PlanarColor")
                     Image = CogImageConvert.GetIntensityImage(Image, 0, 0, Image.Width, Image.Height);
 
-                Pattern.InputImage = Image;
-                ToolManager.PMAlign.Instance.TrainRun(DataStore.Region.Instance.PTrainRegion, DataStore.Pattern.Instance.PPattern);
+                DataStore.Pattern.InputImage = Image;
+                ToolManager.PMAlign.Instance.TrainRun(DataStore.Region.PTrainRegion, DataStore.Pattern.PPattern);
             }
-            if (Pattern.ATrain)
+            if (DataStore.Pattern.ATrain)
             {
                 Load_Image(SetupForm.Instance.ADisplay, "Angle");
                 ICogImage Image = Load_ImageFile(Path.Combine(Application.StartupPath, "Image", "MasterImage.bmp"));
@@ -396,8 +394,8 @@ namespace VisionSystem
                 if (Image.ToString() == "Cognex.VisionPro.CogImage24PlanarColor")
                     Image = CogImageConvert.GetIntensityImage(Image, 0, 0, Image.Width, Image.Height);
 
-                Pattern.InputImage = Image;
-                ToolManager.PMAlign.Instance.TrainRun(DataStore.Region.Instance.ATrainRegion, DataStore.Pattern.Instance.APattern);
+                DataStore.Pattern.InputImage = Image;
+                ToolManager.PMAlign.Instance.TrainRun(DataStore.Region.ATrainRegion, DataStore.Pattern.APattern);
             }
         }
     }

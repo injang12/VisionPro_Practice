@@ -42,7 +42,7 @@
             this.LeftPanel = new System.Windows.Forms.Panel();
             this.LogList = new System.Windows.Forms.ListBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.NumInspTime = new System.Windows.Forms.NumericUpDown();
+            this.InspDelay = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.TxtCurrentImage = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -53,7 +53,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.MDisplay)).BeginInit();
             this.LeftPanel.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumInspTime)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.InspDelay)).BeginInit();
             this.SuspendLayout();
             // 
             // TopPanel
@@ -212,37 +212,37 @@
             this.panel1.Size = new System.Drawing.Size(643, 184);
             this.panel1.TabIndex = 4;
             // 
-            // NumInspTime
+            // InspDelay
             // 
-            this.NumInspTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.NumInspTime.DecimalPlaces = 1;
-            this.NumInspTime.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.NumInspTime.Increment = new decimal(new int[] {
+            this.InspDelay.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.InspDelay.DecimalPlaces = 1;
+            this.InspDelay.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.InspDelay.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.NumInspTime.Location = new System.Drawing.Point(1211, 75);
-            this.NumInspTime.Maximum = new decimal(new int[] {
+            this.InspDelay.Location = new System.Drawing.Point(1211, 75);
+            this.InspDelay.Maximum = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.NumInspTime.Minimum = new decimal(new int[] {
+            this.InspDelay.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.NumInspTime.Name = "NumInspTime";
-            this.NumInspTime.Size = new System.Drawing.Size(44, 19);
-            this.NumInspTime.TabIndex = 5;
-            this.NumInspTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.NumInspTime.Value = new decimal(new int[] {
+            this.InspDelay.Name = "InspDelay";
+            this.InspDelay.Size = new System.Drawing.Size(44, 19);
+            this.InspDelay.TabIndex = 5;
+            this.InspDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.InspDelay.Value = new decimal(new int[] {
             5,
             0,
             0,
             65536});
-            this.NumInspTime.ValueChanged += new System.EventHandler(this.NumInspTime_ValueChanged);
+            this.InspDelay.ValueChanged += new System.EventHandler(this.InspDelay_ValueChanged);
             // 
             // label1
             // 
@@ -284,7 +284,7 @@
             this.Controls.Add(this.TxtCurrentImage);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.NumInspTime);
+            this.Controls.Add(this.InspDelay);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.LeftPanel);
             this.Controls.Add(this.TopPanel);
@@ -302,7 +302,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.MDisplay)).EndInit();
             this.LeftPanel.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.NumInspTime)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.InspDelay)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -322,7 +322,7 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button BtnInsp;
         private System.Windows.Forms.Button BtnFolder;
-        private System.Windows.Forms.NumericUpDown NumInspTime;
+        private System.Windows.Forms.NumericUpDown InspDelay;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label TxtCurrentImage;
         private System.Windows.Forms.Label label2;

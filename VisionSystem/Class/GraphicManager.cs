@@ -8,9 +8,6 @@ namespace VisionSystem
 {
     class GraphicManager
     {
-        readonly static DataStore.Pattern Pattern = DataStore.Pattern.Instance;
-        readonly static DataStore.Region Region = DataStore.Region.Instance;
-
         /// <summary>
         /// 영역 생성
         /// </summary>
@@ -25,16 +22,16 @@ namespace VisionSystem
             switch (SelectedBtn.Name)
             {
                 case "BtnPTrainRegion":
-                    SearchRegion = Region.PTrainRegion;
+                    SearchRegion = DataStore.Region.PTrainRegion;
                     break;
                 case "BtnPRegion":
-                    SearchRegion = Region.PRegion;
+                    SearchRegion = DataStore.Region.PRegion;
                     break;
                 case "BtnATrainRegion":
-                    SearchRegion = Region.ATrainRegion;
+                    SearchRegion = DataStore.Region.ATrainRegion;
                     break;
                 case "BtnARegion":
-                    SearchRegion = Region.ARegion;
+                    SearchRegion = DataStore.Region.ARegion;
                     break;
                 default:
                     return;
@@ -87,7 +84,7 @@ namespace VisionSystem
         {
             CogCreateLineTool CreateLineTool = new CogCreateLineTool()
             {
-                InputImage = Pattern.InputImage,
+                InputImage = DataStore.Pattern.InputImage,
                 OutputColor = CogColorConstants.Yellow,
                 OutputLineWidthInScreenPixels = 3
             };
@@ -113,7 +110,7 @@ namespace VisionSystem
         {
             CogCreateSegmentTool CreateSegmentTool = new CogCreateSegmentTool
             {
-                InputImage = Pattern.InputImage,
+                InputImage = DataStore.Pattern.InputImage,
                 OutputColor = CogColorConstants.Magenta,
                 OutputLineWidthInScreenPixels = 3
             };

@@ -8,6 +8,6 @@
         void BtnSetup_Click(object sender, System.EventArgs e) => SetupForm.Instance.ShowDialog();
         void BtnFolder_Click(object sender, System.EventArgs e) => FileManager.Instance.SpecifyFolder(LogList, false);
         void BtnInsp_Click(object sender, System.EventArgs e) => ToolManager.Instance.AutoInspection(MDisplay, LogList, BtnSetup, BtnFolder, BtnExit, TxtCurrentImage);
-        void NumInspTime_ValueChanged(object sender, System.EventArgs e) => DataStore.Instance.InspDelay = (double)NumInspTime.Value;
+        void InspDelay_ValueChanged(object sender, System.EventArgs e) => DataStore.InspDelay = (double)InspDelay.Value;
     }
 }
