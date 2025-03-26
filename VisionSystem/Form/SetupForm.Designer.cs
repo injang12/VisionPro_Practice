@@ -548,7 +548,7 @@
             this.BtnPRun.TabIndex = 12;
             this.BtnPRun.Text = "Run";
             this.BtnPRun.UseVisualStyleBackColor = false;
-            this.BtnPRun.Click += new System.EventHandler(this.BtnPRun_Click);
+            this.BtnPRun.Click += new System.EventHandler(this.BtnRun_Click);
             // 
             // BtnPRegion
             // 
@@ -769,7 +769,7 @@
             this.BtnARun.TabIndex = 12;
             this.BtnARun.Text = "Run";
             this.BtnARun.UseVisualStyleBackColor = false;
-            this.BtnARun.Click += new System.EventHandler(this.BtnARun_Click);
+            this.BtnARun.Click += new System.EventHandler(this.BtnRun_Click);
             // 
             // BtnARegion
             // 

@@ -9,14 +9,17 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
+using static VisionSystem.DataStore;
+
 namespace VisionSystem
 {
     internal class FileManager
     {
         public static FileManager Instance { get; private set; } = new FileManager();
-        public List<string> SetupImageFileName { get; set; } = new List<string>();
+
+        List<string> SetupImageFileName { get; set; } = new List<string>();
         public List<string> MainImageFileName { get; set; } = new List<string>();
-        public int imageIndex = -1;
+        int ImageIndex { get; set; } = -1;
 
         [DllImport("kernel32")]
         static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
@@ -24,24 +27,24 @@ namespace VisionSystem
         [DllImport("kernel32")]
         static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
 
-        string str_INIPath;
+        string INIPath { get; set; }
 
         /// <summary>
         /// INI파일 경로 지정
         /// </summary>
-        /// <param name="INIPath">불러올 INI파일 경로 입력</param>
-        public void Set_INI_Path(string INIPath) => str_INIPath = INIPath;
+        /// <param name="path">불러올 INI파일 경로 입력</param>
+        void Set_INI_Path(string path) => INIPath = path;
 
         /// <summary>
         /// INI파일 내용 읽어온 후 해당 값 String으로 반환
         /// </summary>
         /// <param name="Section">INI파일의 섹션 이름</param>
         /// <param name="Key">해당 섹션의 내용 이름</param>
-        /// <returns></returns>
-        public string ReadValue(string Section, string Key)
+        /// <returns>string</returns>
+        string ReadValue(string Section, string Key)
         {
             StringBuilder strValue = new StringBuilder(255);
-            GetPrivateProfileString(Section, Key, "", strValue, 255, str_INIPath);
+            GetPrivateProfileString(Section, Key, "", strValue, 255, INIPath);
             return strValue.ToString();
         }
 
@@ -51,10 +54,10 @@ namespace VisionSystem
         /// <param name="Section">INI파일의 섹션 이름</param>
         /// <param name="Key">해당 섹션의 내용 이름</param>
         /// <param name="Value">해당 섹션의 내용 값</param>
-        /// <returns></returns>
-        public bool WriteValue(string Section, string Key, string Value)
+        /// <returns>bool</returns>
+        bool WriteValue(string Section, string Key, string Value)
         {
-            WritePrivateProfileString(Section, Key, Value, str_INIPath);
+            WritePrivateProfileString(Section, Key, Value, INIPath);
             return true;
         }
 
@@ -94,7 +97,7 @@ namespace VisionSystem
 
                     if (FileName.Count > 0)
                     {
-                        imageIndex = 0;
+                        ImageIndex = 0;
                         Utilities.PrintLog(LogList, $"Directory specified successfully! {FileName.Count} images found.");
                     }
                     else Utilities.PrintLog(LogList, "No valid image files found in the selected folder.");
@@ -107,7 +110,7 @@ namespace VisionSystem
         /// 지정한 이미지 폴더 다음 이미지 넘기기
         /// </summary>
         /// <returns>string</returns>
-        public string NextImage(ListBox LogList)
+        string NextImage(ListBox LogList)
         {
             if (SetupImageFileName.Count == 0)
             {
@@ -115,17 +118,17 @@ namespace VisionSystem
                 return null;
             }
 
-            imageIndex++;
-            if (imageIndex >= SetupImageFileName.Count) imageIndex = 0; // 처음으로 돌아감
+            ImageIndex++;
+            if (ImageIndex >= SetupImageFileName.Count) ImageIndex = 0; // 처음으로 돌아감
 
-            return SetupImageFileName[imageIndex];
+            return SetupImageFileName[ImageIndex];
         }
 
         /// <summary>
         /// 지정한 이미지 폴더 이전 이미지 넘기기
         /// </summary>
         /// <returns>string</returns>
-        public string PreImage(ListBox LogList)
+        string PreImage(ListBox LogList)
         {
             if (SetupImageFileName.Count == 0)
             {
@@ -133,13 +136,20 @@ namespace VisionSystem
                 return null;
             }
 
-            imageIndex--;
-            if (imageIndex < 0) imageIndex = SetupImageFileName.Count - 1; // 마지막 이미지로 돌아감
+            ImageIndex--;
+            if (ImageIndex < 0) ImageIndex = SetupImageFileName.Count - 1; // 마지막 이미지로 돌아감
 
-            return SetupImageFileName[imageIndex];
+            return SetupImageFileName[ImageIndex];
         }
 
-
+        /// <summary>
+        /// 지정된 폴더 이미지 넘기기
+        /// </summary>
+        /// <param name="Display">사용 할 디스플레이</param>
+        /// <param name="LogList">사용 할 로그 창</param>
+        /// <param name="CurrentImage">현재 이미지 이름</param>
+        /// <param name="specify">폴더 지정(true) or 이미지 넘기기(false)</param>
+        /// <param name="BtnPath">이미지 넘기기 버튼(이전, 다음 이미지)</param>
         public void TurnImageOver(CogRecordDisplay Display, ListBox LogList, Label CurrentImage, bool specify, Button BtnPath = null)
         {
             string path = null;
@@ -175,22 +185,22 @@ namespace VisionSystem
                 image = CogImageConvert.GetIntensityImage(image, 0, 0, image.Width, image.Height);
 
             Display.Image = image;
-            DataStore.Pattern.InputImage = image;
+            Pattern.InputImage = image;
 
-            ToolManager.Instance.RunManual(Display, LogList);
-            CurrentImage.Text = Path.GetFileName(SetupImageFileName[imageIndex]);
+            ToolManager.RunManual(Display, LogList);
+            CurrentImage.Text = Path.GetFileName(SetupImageFileName[ImageIndex]);
         }
 
         /// <summary>
         /// 이미지 저장
         /// </summary>
         /// <param name="path">경로 지정</param>
-        /// <param name="image">저장 할 이미지</param>
-        public void Save_ImageFile(string path, ICogImage image)
+        /// <param name="Image">저장 할 이미지</param>
+        public void Save_ImageFile(string path, ICogImage Image)
         {
             using (CogImageFileTool imgFileTool = new CogImageFileTool())
             {
-                imgFileTool.InputImage = image;
+                imgFileTool.InputImage = Image;
                 imgFileTool.Operator.Open(path, CogImageFileModeConstants.Write);
                 imgFileTool.Run();
                 imgFileTool.Operator.Close();
@@ -227,7 +237,7 @@ namespace VisionSystem
         }
 
         /// <summary>
-        /// 이미지 로드
+        /// 이미지 로드 (선택)
         /// </summary>
         /// <param name="Display">출력할 디스플레이</param>
         /// /// <param name="LogList">로그 창</param>
@@ -235,8 +245,8 @@ namespace VisionSystem
         {
             using (OpenFileDialog dlg = new OpenFileDialog())
             {
-                dlg.DefaultExt = "bmp";
-                dlg.Filter = "BMP Image (*.bmp)|*.bmp|PNG Image (*.png)|*.png|JPEG Image (*.jpg)|*.jpg";
+                dlg.DefaultExt = "jpg";
+                dlg.Filter = "JPEG Image (*.jpg)|*.jpg|PNG Image (*.png)|*.png|BMP Image (*.bmp)|*.bmp";
 
                 if (dlg.ShowDialog() != DialogResult.OK || !File.Exists(dlg.FileName)) return;
 
@@ -253,14 +263,19 @@ namespace VisionSystem
                         Image = CogImageConvert.GetIntensityImage(ImageFileTool.OutputImage, 0, 0, ImageFileTool.OutputImage.Width, ImageFileTool.OutputImage.Height);
 
                     Display.Image = Image;
-                    DataStore.Pattern.InputImage = Display.Image;
+                    Pattern.InputImage = Display.Image;
 
                     ImageFileTool.Operator.Close();
                 }
                 Utilities.PrintLog(LogList, "Image Load Successful!");
             }
         }
-
+        
+        /// <summary>
+        /// 이미지 로드 (이미지 이름 지정 - 경로: Debug\Image\xxx.bmp)
+        /// </summary>
+        /// <param name="Display">출력 할 디스플레이</param>
+        /// <param name="name">이미지 이름</param>
         void Load_Image(CogRecordDisplay Display, string name)
         {
             using (CogImageFileTool ImageFileTool = new CogImageFileTool())
@@ -276,127 +291,115 @@ namespace VisionSystem
         }
 
         /// <summary>
-        /// 파라미터 저장
+        /// 영역 ini 저장 메서드
         /// </summary>
+        /// <param name="section">ini_Section</param>
+        /// <param name="Region">ini_Key</param>
+        void WriteRegion(string section, CogRectangleAffine Region)
+        {
+            WriteValue(section, "CenterX", Region.CenterX.ToString());
+            WriteValue(section, "CenterY", Region.CenterY.ToString());
+            WriteValue(section, "SideXLength", Region.SideXLength.ToString());
+            WriteValue(section, "SideYLength", Region.SideYLength.ToString());
+            WriteValue(section, "Rotation", Region.Rotation.ToString());
+        }
+
+        /// <summary>
+        /// 영역 ini 로드 메서드
+        /// </summary>
+        /// <param name="section">ini_Section</param>
+        /// <param name="Region">ini_Key</param>
+        void ReadRegion(string section, CogRectangleAffine Region)
+        {
+            Region.CenterX = Convert.ToDouble(ReadValue(section, "CenterX"));
+            Region.CenterY = Convert.ToDouble(ReadValue(section, "CenterY"));
+            Region.SideXLength = Convert.ToDouble(ReadValue(section, "SideXLength"));
+            Region.SideYLength = Convert.ToDouble(ReadValue(section, "SideYLength"));
+            Region.Rotation = Convert.ToDouble(ReadValue(section, "Rotation"));
+        }
+
+        /// <summary>
+        /// 저장된 패턴 트레인
+        /// </summary>
+        /// <param name="name">Point 패턴 or Angle 패턴</param>
+        /// <param name="Display">사용 할 디스플레이</param>
+        /// <param name="Region">트레인 서치영역</param>
+        /// <param name="Pattern">저장 할 패턴 툴</param>
+        void TrainPattern(string name, CogRecordDisplay Display, CogRectangleAffine Region, Cognex.VisionPro.PMAlign.CogPMAlignTool Pattern)
+        {
+            Load_Image(Display, name);
+            string imagePath = Path.Combine(Application.StartupPath, "Image", "MasterImage.bmp");
+            ICogImage image = Load_ImageFile(imagePath);
+
+            if (image.ToString() == "Cognex.VisionPro.CogImage24PlanarColor")
+                image = CogImageConvert.GetIntensityImage(image, 0, 0, image.Width, image.Height);
+
+            Pattern.InputImage = image;
+            ToolManager.PMAlign.Instance.TrainRun(Region, Pattern);
+        }
+
+        /// <summary>
+        /// 파라미터 세이브
+        /// </summary>
+        /// <param name="LogList">로그 창</param>
         public void ParamSave(ListBox LogList)
         {
             if (MessageBox.Show("Do you want to save it?", "Caution", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
 
             string path = Path.Combine(Application.StartupPath, "Param");
+
             Directory.CreateDirectory(path);
 
-            path = Path.Combine(path, "Param.ini");
+            string iniPath = Path.Combine(path, "Param.ini");
 
-            if (!File.Exists(path))
-            {
-                using (FileStream fs = File.Create(path))
-                {
-                }
-            }
-            Set_INI_Path(path);
+            if (!File.Exists(iniPath)) File.Create(iniPath).Dispose();
 
-            WriteValue("PPattern", "Threshold", DataStore.Pattern.PThreshold.ToString());
-            WriteValue("PPattern", "Angle", DataStore.Pattern.PAngle.ToString());
+            Set_INI_Path(iniPath);
 
-            WriteValue("APattern", "Threshold", DataStore.Pattern.AThreshold.ToString());
-            WriteValue("APattern", "Angle", DataStore.Pattern.AAngle.ToString());
+            WriteValue("PPattern", "Threshold", Pattern.PThreshold.ToString());
+            WriteValue("PPattern", "Angle", Pattern.PAngle.ToString());
+            WriteValue("APattern", "Threshold", Pattern.AThreshold.ToString());
+            WriteValue("APattern", "Angle", Pattern.AAngle.ToString());
 
-            WriteValue("PTrain", "CenterX", DataStore.Region.PTrainRegion.CenterX.ToString());
-            WriteValue("PTrain", "CenterY", DataStore.Region.PTrainRegion.CenterY.ToString());
-            WriteValue("PTrain", "SideXLength", DataStore.Region.PTrainRegion.SideXLength.ToString());
-            WriteValue("PTrain", "SideYLength", DataStore.Region.PTrainRegion.SideYLength.ToString());
-            WriteValue("PTrain", "Rotation", DataStore.Region.PTrainRegion.Rotation.ToString());
+            WriteRegion("PTrain", RectangleRegion.PTrainRegion);
+            WriteRegion("PSearch", RectangleRegion.PRegion);
+            WriteRegion("ATrain", RectangleRegion.ATrainRegion);
+            WriteRegion("ASearch", RectangleRegion.ARegion);
 
-            WriteValue("PSearch", "CenterX", DataStore.Region.PRegion.CenterX.ToString());
-            WriteValue("PSearch", "CenterY", DataStore.Region.PRegion.CenterY.ToString());
-            WriteValue("PSearch", "SideXLength", DataStore.Region.PRegion.SideXLength.ToString());
-            WriteValue("PSearch", "SideYLength", DataStore.Region.PRegion.SideYLength.ToString());
-            WriteValue("PSearch", "Rotation", DataStore.Region.PRegion.Rotation.ToString());
-
-            WriteValue("ATrain", "CenterX", DataStore.Region.ATrainRegion.CenterX.ToString());
-            WriteValue("ATrain", "CenterY", DataStore.Region.ATrainRegion.CenterY.ToString());
-            WriteValue("ATrain", "SideXLength", DataStore.Region.ATrainRegion.SideXLength.ToString());
-            WriteValue("ATrain", "SideYLength", DataStore.Region.ATrainRegion.SideYLength.ToString());
-            WriteValue("ATrain", "Rotation", DataStore.Region.ATrainRegion.Rotation.ToString());
-
-            WriteValue("ASearch", "CenterX", DataStore.Region.ARegion.CenterX.ToString());
-            WriteValue("ASearch", "CenterY", DataStore.Region.ARegion.CenterY.ToString());
-            WriteValue("ASearch", "SideXLength", DataStore.Region.ARegion.SideXLength.ToString());
-            WriteValue("ASearch", "SideYLength", DataStore.Region.ARegion.SideYLength.ToString());
-            WriteValue("ASearch", "Rotation", DataStore.Region.ARegion.Rotation.ToString());
-
-            WriteValue("Train", "Point", DataStore.Pattern.PTrain.ToString());
-            WriteValue("Train", "Angle", DataStore.Pattern.ATrain.ToString());
+            WriteValue("Train", "Point", Pattern.PTrain.ToString());
+            WriteValue("Train", "Angle", Pattern.ATrain.ToString());
 
             Utilities.PrintLog(LogList, "Successfully saved parameters.");
         }
 
         /// <summary>
-        /// 파라미터 불러오기
+        /// 파라미터 로드
         /// </summary>
         public void ParamLoad()
         {
-            string path = Path.Combine(Application.StartupPath, "Param", "Param.ini");
+            string iniPath = Path.Combine(Application.StartupPath, "Param", "Param.ini");
 
-            if (!File.Exists(path)) return;
+            if (!File.Exists(iniPath)) return;
 
-            Set_INI_Path(path);
+            Set_INI_Path(iniPath);
 
-            DataStore.Pattern.PThreshold = Convert.ToDouble(ReadValue("PPattern", "Threshold"));
-            DataStore.Pattern.PAngle = Convert.ToDouble(ReadValue("PPattern", "Angle"));
+            Pattern.PThreshold = Convert.ToDouble(ReadValue("PPattern", "Threshold"));
+            Pattern.PAngle = Convert.ToDouble(ReadValue("PPattern", "Angle"));
+            Pattern.AThreshold = Convert.ToDouble(ReadValue("APattern", "Threshold"));
+            Pattern.AAngle = Convert.ToDouble(ReadValue("APattern", "Angle"));
 
-            DataStore.Pattern.AThreshold = Convert.ToDouble(ReadValue("APattern", "Threshold"));
-            DataStore.Pattern.AAngle = Convert.ToDouble(ReadValue("APattern", "Angle"));
+            ReadRegion("PTrain", RectangleRegion.PTrainRegion);
+            ReadRegion("PSearch", RectangleRegion.PRegion);
+            ReadRegion("ATrain", RectangleRegion.ATrainRegion);
+            ReadRegion("ASearch", RectangleRegion.ARegion);
 
-            DataStore.Region.PTrainRegion.CenterX = Convert.ToDouble(ReadValue("PTrain", "CenterX"));
-            DataStore.Region.PTrainRegion.CenterY = Convert.ToDouble(ReadValue("PTrain", "CenterY"));
-            DataStore.Region.PTrainRegion.SideXLength = Convert.ToDouble(ReadValue("PTrain", "SideXLength"));
-            DataStore.Region.PTrainRegion.SideYLength = Convert.ToDouble(ReadValue("PTrain", "SideYLength"));
-            DataStore.Region.PTrainRegion.Rotation = Convert.ToDouble(ReadValue("PTrain", "Rotation"));
+            Pattern.PTrain = Convert.ToBoolean(ReadValue("Train", "Point"));
+            Pattern.ATrain = Convert.ToBoolean(ReadValue("Train", "Angle"));
 
-            DataStore.Region.PRegion.CenterX = Convert.ToDouble(ReadValue("PSearch", "CenterX"));
-            DataStore.Region.PRegion.CenterY = Convert.ToDouble(ReadValue("PSearch", "CenterY"));
-            DataStore.Region.PRegion.SideXLength = Convert.ToDouble(ReadValue("PSearch", "SideXLength"));
-            DataStore.Region.PRegion.SideYLength = Convert.ToDouble(ReadValue("PSearch", "SideYLength"));
-            DataStore.Region.PRegion.Rotation = Convert.ToDouble(ReadValue("PSearch", "Rotation"));
-
-            DataStore.Region.ATrainRegion.CenterX = Convert.ToDouble(ReadValue("ATrain", "CenterX"));
-            DataStore.Region.ATrainRegion.CenterY = Convert.ToDouble(ReadValue("ATrain", "CenterY"));
-            DataStore.Region.ATrainRegion.SideXLength = Convert.ToDouble(ReadValue("ATrain", "SideXLength"));
-            DataStore.Region.ATrainRegion.SideYLength = Convert.ToDouble(ReadValue("ATrain", "SideYLength"));
-            DataStore.Region.ATrainRegion.Rotation = Convert.ToDouble(ReadValue("ATrain", "Rotation"));
-
-            DataStore.Region.ARegion.CenterX = Convert.ToDouble(ReadValue("ASearch", "CenterX"));
-            DataStore.Region.ARegion.CenterY = Convert.ToDouble(ReadValue("ASearch", "CenterY"));
-            DataStore.Region.ARegion.SideXLength = Convert.ToDouble(ReadValue("ASearch", "SideXLength"));
-            DataStore.Region.ARegion.SideYLength = Convert.ToDouble(ReadValue("ASearch", "SideYLength"));
-            DataStore.Region.ARegion.Rotation = Convert.ToDouble(ReadValue("ASearch", "Rotation"));
-
-            DataStore.Pattern.PTrain = Convert.ToBoolean(ReadValue("Train", "Point"));
-            DataStore.Pattern.ATrain = Convert.ToBoolean(ReadValue("Train", "Angle"));
-
-            if (DataStore.Pattern.PTrain)
-            {
-                Load_Image(SetupForm.Instance.PDisplay, "Point");
-                ICogImage Image = Load_ImageFile(Path.Combine(Application.StartupPath, "Image", "MasterImage.bmp"));
-
-                if (Image.ToString() == "Cognex.VisionPro.CogImage24PlanarColor")
-                    Image = CogImageConvert.GetIntensityImage(Image, 0, 0, Image.Width, Image.Height);
-
-                DataStore.Pattern.InputImage = Image;
-                ToolManager.PMAlign.Instance.TrainRun(DataStore.Region.PTrainRegion, DataStore.Pattern.PPattern);
-            }
-            if (DataStore.Pattern.ATrain)
-            {
-                Load_Image(SetupForm.Instance.ADisplay, "Angle");
-                ICogImage Image = Load_ImageFile(Path.Combine(Application.StartupPath, "Image", "MasterImage.bmp"));
-
-                if (Image.ToString() == "Cognex.VisionPro.CogImage24PlanarColor")
-                    Image = CogImageConvert.GetIntensityImage(Image, 0, 0, Image.Width, Image.Height);
-
-                DataStore.Pattern.InputImage = Image;
-                ToolManager.PMAlign.Instance.TrainRun(DataStore.Region.ATrainRegion, DataStore.Pattern.APattern);
-            }
+            if (Pattern.PTrain)
+                TrainPattern("Point", SetupForm.Instance.PDisplay, RectangleRegion.PTrainRegion, Pattern.PPattern);
+            if (Pattern.ATrain)
+                TrainPattern("Angle", SetupForm.Instance.ADisplay, RectangleRegion.ATrainRegion, Pattern.APattern);
         }
     }
 }

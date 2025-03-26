@@ -17,8 +17,8 @@
             public static bool PTrain { get; set; } = false;
             public static bool ATrain { get; set; } = false;
         }
-
-        public class Region
+        
+        public class RectangleRegion
         {
             public static Cognex.VisionPro.CogRectangleAffine PTrainRegion { get; set; } = new Cognex.VisionPro.CogRectangleAffine();
             public static Cognex.VisionPro.CogRectangleAffine PRegion { get; set; } = new Cognex.VisionPro.CogRectangleAffine();

@@ -6,8 +6,7 @@ namespace VisionSystem
     {
         public static SetupForm Instance { get; private set; } = new SetupForm();
 
-        readonly ToolManager.PMAlign PMAlign = ToolManager.PMAlign.Instance;
-        readonly ToolManager TManager = ToolManager.Instance;
+        readonly ToolManager.PMAlign Pattern = ToolManager.PMAlign.Instance;
         readonly FileManager FManager = FileManager.Instance;
 
         public SetupForm() => InitializeComponent();
@@ -19,10 +18,9 @@ namespace VisionSystem
         void SetupDisplay_DoubleClick(object sender, System.EventArgs e) => FManager.Load_Image(SDisplay, LogList);
         void Numeric_ValueChanged(object sender, System.EventArgs e) => Utilities.ValueChange((NumericUpDown)sender);
         void BtnRegion_Click(object sender, System.EventArgs e) => GraphicManager.InitRegion(SDisplay, (Button)sender);
-        void BtnTrain_Click(object sender, System.EventArgs e) => PMAlign.PatternTrain(SDisplay, PDisplay, ADisplay, LogList, (Button)sender);
-        void BtnARun_Click(object sender, System.EventArgs e) => PMAlign.PatternRun(SDisplay, DataStore.Pattern.APattern, DataStore.Region.ARegion, DataStore.Pattern.AAngle, DataStore.Pattern.AThreshold, "Run", LogList);
-        void BtnPRun_Click(object sender, System.EventArgs e) => PMAlign.PatternRun(SDisplay, DataStore.Pattern.PPattern, DataStore.Region.PRegion, DataStore.Pattern.PAngle, DataStore.Pattern.PThreshold, "Run", LogList);
-        void BtnManualRun_Click(object sender, System.EventArgs e) => TManager.RunManual(SDisplay, LogList);
+        void BtnTrain_Click(object sender, System.EventArgs e) => Pattern.PatternTrain(SDisplay, PDisplay, ADisplay, LogList, (Button)sender);
+        void BtnRun_Click(object sender, System.EventArgs e) => Pattern.PatternRun(SDisplay, (sender as Control)?.Name, "Run", LogList);
+        void BtnManualRun_Click(object sender, System.EventArgs e) => ToolManager.RunManual(SDisplay, LogList);
         void ChkBox_Check(object sender, System.EventArgs e) => Utilities.SelectedCheckBox(SDisplay, (CheckBox)sender, ChkAngle, ChkPoint, PGroup, AGroup);
     }
 }

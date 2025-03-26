@@ -12,6 +12,7 @@ namespace VisionSystem
     internal class ToolManager
     {
         public static ToolManager Instance { get; private set; } = new ToolManager();
+        readonly static PMAlign Pattern = PMAlign.Instance;
         readonly FileManager FManager = FileManager.Instance;
 
         bool isStart = false;       // 자동 검사 시작 체크
@@ -24,12 +25,12 @@ namespace VisionSystem
         /// </summary>
         /// <param name="Display">지정 할 디스플레이</param>
         /// <param name="LogList">로그 창 지정</param>
-        public void RunManual(CogRecordDisplay Display, ListBox LogList)
+        public static void RunManual(CogRecordDisplay Display, ListBox LogList)
         {
             Utilities.DisplayClear(Display);
 
-            if (!PMAlign.Instance.PatternRun(Display, DataStore.Pattern.PPattern, DataStore.Region.PRegion, DataStore.Pattern.PAngle, DataStore.Pattern.PThreshold, "", LogList)) return;
-            if (!PMAlign.Instance.PatternRun(Display, DataStore.Pattern.APattern, DataStore.Region.ARegion, DataStore.Pattern.AAngle, DataStore.Pattern.AThreshold, "ManualRun", LogList)) return;
+            if (!Pattern.PatternRun(Display, "BtnPRun", "", LogList)) return;
+            if (!Pattern.PatternRun(Display, "BtnARun", "ManualRun", LogList)) return;
 
             double x1 = DataStore.Pattern.PPattern.Results[0].GetPose().TranslationX;
             double y1 = DataStore.Pattern.PPattern.Results[0].GetPose().TranslationY;
@@ -144,8 +145,8 @@ namespace VisionSystem
 
             Utilities.DisplayClear(Display);
 
-            if (!PMAlign.Instance.PatternRun(Display, DataStore.Pattern.PPattern, DataStore.Region.PRegion, DataStore.Pattern.PAngle, DataStore.Pattern.PThreshold, null)) return;
-            if (!PMAlign.Instance.PatternRun(Display, DataStore.Pattern.APattern, DataStore.Region.ARegion, DataStore.Pattern.AAngle, DataStore.Pattern.AThreshold, null)) return;
+            if (!Pattern.PatternRun(Display, "BtnPRun", null)) return;
+            if (!Pattern.PatternRun(Display, "BtnARun", null)) return;
 
             double x1 = DataStore.Pattern.PPattern.Results[0].GetPose().TranslationX;
             double y1 = DataStore.Pattern.PPattern.Results[0].GetPose().TranslationY;
@@ -168,7 +169,6 @@ namespace VisionSystem
         public class PMAlign
         {
             public static PMAlign Instance { get; private set; } = new PMAlign();
-            readonly FileManager FManager = FileManager.Instance;
             
             public void PatternTrain(CogRecordDisplay SDisplay, CogRecordDisplay PDisplay, CogRecordDisplay ADisplay, ListBox LogList, Button BtnTrain)
             {
@@ -187,13 +187,13 @@ namespace VisionSystem
                 {
                     case "BtnPTrain":
                         Display = PDisplay;
-                        TrainRegion = DataStore.Region.PTrainRegion;
+                        TrainRegion = DataStore.RectangleRegion.PTrainRegion;
                         overwriteCheck = DataStore.Pattern.PTrain;
                         toolName = "Point";
                         break;
                     case "BtnATrain":
                         Display = ADisplay;
-                        TrainRegion = DataStore.Region.ATrainRegion;
+                        TrainRegion = DataStore.RectangleRegion.ATrainRegion;
                         overwriteCheck = DataStore.Pattern.ATrain;
                         toolName = "Angle";
                         break;
@@ -222,6 +222,7 @@ namespace VisionSystem
 
                 Display.Image = DataStore.Pattern.TrainImage;
 
+                FileManager FManager = FileManager.Instance;
                 FManager.Save_ImageFile(Path.Combine(imagePath, $"{toolName}.bmp"), Display.Image);
                 FManager.Save_ImageFile(Path.Combine(imagePath, "MasterImage.bmp"), SDisplay.Image);
 
@@ -259,12 +260,10 @@ namespace VisionSystem
             /// 패턴 서치
             /// </summary>
             /// <param name="Display">입출력 디스플레이</param>
-            /// <param name="PMAlignTool">사용 할 패턴 툴</param>
-            /// <param name="SearchRegion">서치 영역</param>
-            /// <param name="angle">각도</param>
-            /// <param name="threshold">임계치</param>
+            /// <param name="name">Point, Angle 구분</param>
+            /// <param name="mode">Run, Manual 구분</param>
             /// <param name="LogList">출력 할 로그 창</param>
-            public bool PatternRun(CogRecordDisplay Display, CogPMAlignTool PMAlignTool, CogRectangleAffine SearchRegion, double angle, double threshold, string mode, ListBox LogList = null)
+            public bool PatternRun(CogRecordDisplay Display, string name, string mode, ListBox LogList = null)
             {
                 if (mode == "Run") Utilities.DisplayClear(Display);
 
@@ -272,6 +271,27 @@ namespace VisionSystem
                 {
                     if (LogList != null) Utilities.PrintLog(LogList, "There is no image.");
                     return false;
+                }
+
+                CogPMAlignTool PMAlignTool = new CogPMAlignTool();
+                CogRectangleAffine SearchRegion = new CogRectangleAffine();
+                double angle = 0;
+                double threshold = 0;
+
+                switch (name)
+                {
+                    case "BtnPRun":
+                        PMAlignTool = DataStore.Pattern.PPattern;
+                        SearchRegion = DataStore.RectangleRegion.PRegion;
+                        angle = DataStore.Pattern.PAngle;
+                        threshold = DataStore.Pattern.PThreshold;
+                        break;
+                    case "BtnARun":
+                        PMAlignTool = DataStore.Pattern.APattern;
+                        SearchRegion = DataStore.RectangleRegion.ARegion;
+                        angle = DataStore.Pattern.AAngle;
+                        threshold = DataStore.Pattern.AThreshold;
+                        break;
                 }
 
                 if (!PMAlignTool.Pattern.Trained)
@@ -290,36 +310,7 @@ namespace VisionSystem
 
                 PMAlignTool.Run();
 
-                if (PMAlignTool.Results == null || PMAlignTool.Results.Count <= 0)
-                {
-                    SearchRegion.Color = CogColorConstants.Red;
-                    SearchRegion.XDirectionAdornment = CogRectangleAffineDirectionAdornmentConstants.None;
-                    SearchRegion.YDirectionAdornment = CogRectangleAffineDirectionAdornmentConstants.None;
-
-                    Display.StaticGraphics.Add(SearchRegion, "");
-
-                    GraphicManager.CreateLabel(Display, CogColorConstants.Red, new Font("Segoe UI", 50f), "NG", 300, 200);
-
-                    return false;
-                }
-
-                CogCompositeShape ResultGraphics = PMAlignTool.Results[0].CreateResultGraphics(CogPMAlignResultGraphicConstants.MatchRegion | CogPMAlignResultGraphicConstants.Origin);
-
-                Display.StaticGraphics.Add(ResultGraphics, null);
-
-                double PointX = PMAlignTool.Results[0].GetPose().TranslationX;
-                double PointY = PMAlignTool.Results[0].GetPose().TranslationY;
-
-                string strScore = $"Score: {PMAlignTool.Results[0].Score * 100:0}";
-                string strPos = $"X: {PointX:0.00}, Y: {PointY:0.00}";
-
-                GraphicManager.CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), strScore, PointX, PointY + 150, CogColorConstants.Black);
-                GraphicManager.CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), strPos, PointX, PointY + 200, CogColorConstants.Black);
-
-                if (PMAlignTool.Results[0].Score > PMAlignTool.RunParams.AcceptThreshold)
-                    GraphicManager.CreateLabel(Display, CogColorConstants.Green, new Font("Segoe UI", 50f), "OK", 300, 200);
-                else
-                    GraphicManager.CreateLabel(Display, CogColorConstants.Red, new Font("Segoe UI", 50f), "NG", 300, 200);
+                if (!GraphicManager.PatternResultGraphics(Display, PMAlignTool, SearchRegion)) return false;
 
                 switch (mode)
                 {

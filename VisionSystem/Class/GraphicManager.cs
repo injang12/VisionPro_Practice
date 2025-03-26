@@ -1,4 +1,5 @@
 ﻿using Cognex.VisionPro;
+using Cognex.VisionPro.PMAlign;
 using Cognex.VisionPro.Dimensioning;
 
 using System.Drawing;
@@ -22,16 +23,16 @@ namespace VisionSystem
             switch (SelectedBtn.Name)
             {
                 case "BtnPTrainRegion":
-                    SearchRegion = DataStore.Region.PTrainRegion;
+                    SearchRegion = DataStore.RectangleRegion.PTrainRegion;
                     break;
                 case "BtnPRegion":
-                    SearchRegion = DataStore.Region.PRegion;
+                    SearchRegion = DataStore.RectangleRegion.PRegion;
                     break;
                 case "BtnATrainRegion":
-                    SearchRegion = DataStore.Region.ATrainRegion;
+                    SearchRegion = DataStore.RectangleRegion.ATrainRegion;
                     break;
                 case "BtnARegion":
-                    SearchRegion = DataStore.Region.ARegion;
+                    SearchRegion = DataStore.RectangleRegion.ARegion;
                     break;
                 default:
                     return;
@@ -123,6 +124,49 @@ namespace VisionSystem
             CreateSegmentTool.Run();
 
             Display.StaticGraphics.Add(CreateSegmentTool.GetOutputSegment(), null);
+        }
+
+        /// <summary>
+        /// 패턴 결과 그래픽 그리기
+        /// </summary>
+        /// <param name="Display">사용 할 디스플레이</param>
+        /// <param name="PMAlignTool">패턴 툴</param>
+        /// <param name="SearchRegion">서치 영역</param>
+        /// <returns>bool</returns>
+        public static bool PatternResultGraphics(CogRecordDisplay Display, CogPMAlignTool PMAlignTool, CogRectangleAffine SearchRegion)
+        {
+            if (PMAlignTool.Results == null || PMAlignTool.Results.Count <= 0)
+            {
+                SearchRegion.Color = CogColorConstants.Red;
+                SearchRegion.XDirectionAdornment = CogRectangleAffineDirectionAdornmentConstants.None;
+                SearchRegion.YDirectionAdornment = CogRectangleAffineDirectionAdornmentConstants.None;
+
+                Display.StaticGraphics.Add(SearchRegion, "");
+
+                CreateLabel(Display, CogColorConstants.Red, new Font("Segoe UI", 50f), "NG", 300, 200);
+
+                return false;
+            }
+
+            CogCompositeShape ResultGraphics = PMAlignTool.Results[0].CreateResultGraphics(CogPMAlignResultGraphicConstants.MatchRegion | CogPMAlignResultGraphicConstants.Origin);
+
+            Display.StaticGraphics.Add(ResultGraphics, null);
+
+            double PointX = PMAlignTool.Results[0].GetPose().TranslationX;
+            double PointY = PMAlignTool.Results[0].GetPose().TranslationY;
+
+            string strScore = $"Score: {PMAlignTool.Results[0].Score * 100:0}";
+            string strPos = $"X: {PointX:0.00}, Y: {PointY:0.00}";
+
+            CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), strScore, PointX, PointY + 150, CogColorConstants.Black);
+            CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), strPos, PointX, PointY + 200, CogColorConstants.Black);
+
+            if (PMAlignTool.Results[0].Score > PMAlignTool.RunParams.AcceptThreshold)
+                CreateLabel(Display, CogColorConstants.Green, new Font("Segoe UI", 50f), "OK", 300, 200);
+            else
+                CreateLabel(Display, CogColorConstants.Red, new Font("Segoe UI", 50f), "NG", 300, 200);
+
+            return true;
         }
     }
 }
