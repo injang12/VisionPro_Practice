@@ -26,177 +26,147 @@ namespace VisionSystem
         string INIPath { get; set; }
 
         /// <summary>
-        /// INI파일 경로 지정
+        /// INI 파일 경로를 설정합니다.
         /// </summary>
-        /// <param name="path">불러올 INI파일 경로 입력</param>
+        /// <param name="path">INI 파일 전체 경로</param>
         void Set_INI_Path(string path) => INIPath = path;
 
         /// <summary>
-        /// INI파일 내용 읽어온 후 해당 값 String으로 반환
+        /// INI 파일에서 값을 읽어 문자열로 반환합니다.
         /// </summary>
-        /// <param name="Section">INI파일의 섹션 이름</param>
-        /// <param name="Key">해당 섹션의 내용 이름</param>
-        /// <returns>string</returns>
-        string ReadValue(string Section, string Key)
+        /// <param name="section">INI 파일의 섹션 이름</param>
+        /// <param name="key">섹션 내 키 이름</param>
+        /// <returns>해당 키의 문자열 값</returns>
+        string ReadValue(string section, string key)
         {
             System.Text.StringBuilder strValue = new System.Text.StringBuilder(255);
-            GetPrivateProfileString(Section, Key, "", strValue, 255, INIPath);
+            GetPrivateProfileString(section, key, "", strValue, 255, INIPath);
             return strValue.ToString();
         }
 
         /// <summary>
-        /// INI파일 내용 입력한 값으로 수정
+        /// INI 파일에 문자열 값을 기록합니다.
         /// </summary>
-        /// <param name="Section">INI파일의 섹션 이름</param>
-        /// <param name="Key">해당 섹션의 내용 이름</param>
-        /// <param name="Value">해당 섹션의 내용 값</param>
-        /// <returns>bool</returns>
-        bool WriteValue(string Section, string Key, string Value)
-        {
-            WritePrivateProfileString(Section, Key, Value, INIPath);
-            return true;
-        }
+        /// <param name="section">INI 파일의 섹션 이름</param>
+        /// <param name="key">섹션 내 키 이름</param>
+        /// <param name="value">기록할 값</param>
+        void WriteValue(string section, string key, string value) => WritePrivateProfileString(section, key, value, INIPath);
 
         /// <summary>
-        /// 자동 검사에 사용 할 이미지 폴더 지정
+        /// 검사에 사용할 이미지 폴더를 지정하고, 이미지 파일 목록을 갱신합니다.
         /// </summary>
-        /// <param name="LogList">로그 창 지정</param>
-        /// <param name="isSetup">셋업 창, 메인 창 구분</param>
-        public void SpecifyFolder(ListBox LogList, bool isSetup)
+        /// <param name="logList">로그 출력용 ListBox</param>
+        /// <param name="isSetup">Setup폼 인지 여부</param>
+        public void SpecifyFolder(ListBox logList, bool isSetup)
         {
-            List<string> FileName = new List<string>();
+            List<string> FileList = isSetup ? SetupImageFileName : MainImageFileName;
 
-            FileName = isSetup ? SetupImageFileName : MainImageFileName;
-
-            using (FolderBrowserDialog openFolder = new FolderBrowserDialog())
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
-                if (openFolder.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK || string.IsNullOrEmpty(dialog.SelectedPath))
                 {
-                    string folderPath = openFolder.SelectedPath;
-
-                    if (string.IsNullOrEmpty(folderPath))
-                    {
-                        Util.PrintLog(LogList, "Failed to specify folder...");
-                        return;
-                    }
-
-                    string[] files = Directory.GetFiles(folderPath);
-                    FileName.Clear();
-                    FileName.AddRange(files);
-
-                    // 확장자 필터링
-                    FileName = FileName.Where(file =>
-                        file.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase) ||
-                        file.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
-                        file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
-                    ).ToList();
-
-                    if (FileName.Count > 0)
-                    {
-                        ImageIndex = 0;
-                        Util.PrintLog(LogList, $"Directory specified successfully! {FileName.Count} images found.");
-                    }
-                    else Util.PrintLog(LogList, "No valid image files found in the selected folder.");
+                    Util.PrintLog(logList, "Failed to specify folder...");
+                    return;
                 }
-                else Util.PrintLog(LogList, "Failed to specify folder...");
+
+                List<string> files = Directory.GetFiles(dialog.SelectedPath).Where(f =>
+                    f.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase) ||
+                    f.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                    f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)).ToList();
+
+                FileList.Clear();
+                FileList.AddRange(files);
+
+                if (FileList.Count > 0)
+                {
+                    ImageIndex = 0;
+                    Util.PrintLog(logList, $"Directory specified successfully! {FileList.Count} images found.");
+                }
+                else Util.PrintLog(logList, "No valid image files found in the selected folder.");
             }
         }
 
         /// <summary>
-        /// 지정한 이미지 폴더 다음 이미지 넘기기
+        /// 다음 이미지 경로를 반환합니다. 마지막 이미지 이후에는 처음으로 순환됩니다.
         /// </summary>
-        /// <returns>string</returns>
-        string NextImage(ListBox LogList)
+        /// <param name="logList">로그 출력용 ListBox</param>
+        /// <returns>이미지 경로 문자열</returns>
+        string NextImage(ListBox logList)
         {
-            if (SetupImageFileName.Count == 0)
-            {
-                Util.PrintLog(LogList, "The specified folder does not exist...");
-                return null;
-            }
+            if (SetupImageFileName.Count == 0) return Util.PrintLog(logList, "The specified folder does not exist...");
 
-            ImageIndex++;
-            if (ImageIndex >= SetupImageFileName.Count) ImageIndex = 0; // 처음으로 돌아감
-
+            if (++ImageIndex >= SetupImageFileName.Count) ImageIndex = 0;
             return SetupImageFileName[ImageIndex];
         }
 
         /// <summary>
-        /// 지정한 이미지 폴더 이전 이미지 넘기기
+        /// 이전 이미지 경로를 반환합니다. 처음 이미지 이전에는 마지막으로 순환됩니다.
         /// </summary>
-        /// <returns>string</returns>
-        string PreImage(ListBox LogList)
+        /// <param name="logList">로그 출력용 ListBox</param>
+        /// <returns>이미지 경로 문자열</returns>
+        string PreImage(ListBox logList)
         {
-            if (SetupImageFileName.Count == 0)
-            {
-                Util.PrintLog(LogList, "The specified folder does not exist...");
-                return null;
-            }
+            if (SetupImageFileName.Count == 0) return Util.PrintLog(logList, "The specified folder does not exist...");
 
-            ImageIndex--;
-            if (ImageIndex < 0) ImageIndex = SetupImageFileName.Count - 1; // 마지막 이미지로 돌아감
-
+            if (--ImageIndex < 0) ImageIndex = SetupImageFileName.Count - 1;
             return SetupImageFileName[ImageIndex];
         }
 
         /// <summary>
-        /// 지정된 폴더 이미지 넘기기
+        /// 이미지 파일을 불러와 디스플레이에 출력하며, 초기화 여부에 따라 폴더 지정 또는 이미지 순서를 결정합니다.
         /// </summary>
-        /// <param name="Display">사용 할 디스플레이</param>
-        /// <param name="LogList">사용 할 로그 창</param>
-        /// <param name="CurrentImage">현재 이미지 이름</param>
-        /// <param name="specify">폴더 지정(true) or 이미지 넘기기(false)</param>
-        /// <param name="BtnPath">이미지 넘기기 버튼(이전, 다음 이미지)</param>
-        public void ImageChange(CogRecordDisplay Display, ListBox LogList, Label CurrentImage, bool specify, Button BtnPath = null)
+        /// <param name="display">이미지를 출력할 CogRecordDisplay</param>
+        /// <param name="logList">로그 출력용 ListBox</param>
+        /// <param name="currentImage">현재 이미지 파일명을 표시할 Label</param>
+        /// <param name="specify">true: 폴더 지정, false: 이미지 순서 이동</param>
+        /// <param name="btnPath">버튼 컨트롤 (BtnPreImage 또는 BtnNextImage)</param>
+        public void ImageChange(CogRecordDisplay display, ListBox logList, Label currentImage, bool specify, Button btnPath = null)
         {
             string path = null;
 
             if (specify)
             {
-                SpecifyFolder(LogList, true);
-
+                SpecifyFolder(logList, true);
                 if (SetupImageFileName.Count == 0) return;
-
                 path = SetupImageFileName[0];
             }
-            else
+            else if (btnPath != null)
             {
-                switch (BtnPath.Name)
+                switch (btnPath.Name)
                 {
                     case "BtnPreImage":
-                        path = PreImage(LogList);
+                        path = PreImage(logList);
                         break;
                     case "BtnNextImage":
-                        path = NextImage(LogList);
-                        break;
-                    default:
+                        path = NextImage(logList);
                         break;
                 }
             }
 
             ICogImage image = Load_ImageFile(path);
-
             if (image == null) return;
 
-            if (image is CogImage24PlanarColor)
-                image = CogImageConvert.GetIntensityImage(image, 0, 0, image.Width, image.Height);
+            if (image is CogImage24PlanarColor) image = CogImageConvert.GetIntensityImage(image, 0, 0, image.Width, image.Height);
 
-            Display.Image = image;
+            display.Image = image;
             DataStore.Pattern.InputImage = image;
 
-            ToolManager.RunManual(Display, LogList);
-            CurrentImage.Text = Path.GetFileName(SetupImageFileName[ImageIndex]);
+            ToolManager.RunManual(display, logList);
+            currentImage.Text = Path.GetFileName(SetupImageFileName[ImageIndex]);
+
+            GC.Collect();
         }
 
         /// <summary>
-        /// 이미지 저장
+        /// 지정한 경로에 이미지를 저장합니다.
         /// </summary>
-        /// <param name="path">경로 지정</param>
-        /// <param name="Image">저장 할 이미지</param>
-        public void Save_ImageFile(string path, ICogImage Image)
+        /// <param name="path">저장할 경로</param>
+        /// <param name="image">저장할 이미지 객체</param>
+        public void Save_ImageFile(string path, ICogImage image)
         {
             using (CogImageFileTool imgFileTool = new CogImageFileTool())
             {
-                imgFileTool.InputImage = Image;
+                imgFileTool.InputImage = image;
                 imgFileTool.Operator.Open(path, CogImageFileModeConstants.Write);
                 imgFileTool.Run();
                 imgFileTool.Operator.Close();
@@ -204,149 +174,133 @@ namespace VisionSystem
         }
 
         /// <summary>
-        /// 이미지 불러오기(경로)
+        /// 지정된 경로에서 이미지를 로드합니다.
         /// </summary>
-        /// <param name="imagePath">경로 지정</param>
-        /// <returns>ICogImage</returns>
+        /// <param name="imagePath">불러올 이미지 경로</param>
+        /// <returns>ICogImage 객체. 실패 시 null 반환</returns>
         public ICogImage Load_ImageFile(string imagePath)
         {
             if (imagePath == null) return null;
 
-            try
+            using (CogImageFileTool tool = new CogImageFileTool())
             {
-                using (CogImageFileTool imgFileTool = new CogImageFileTool())
-                {
-                    imgFileTool.Operator.Open(imagePath, CogImageFileModeConstants.Read);
-                    imgFileTool.Run();
-
-                    ICogImage lo_Image8bit = imgFileTool.OutputImage;
-
-                    imgFileTool.Operator.Close();
-
-                    return lo_Image8bit;
-                }
-            }
-            catch (Exception)
-            {
-                return null;
+                tool.Operator.Open(imagePath, CogImageFileModeConstants.Read);
+                tool.Run();
+                return tool.OutputImage;
             }
         }
 
         /// <summary>
-        /// 이미지 로드 (선택)
+        /// 파일 다이얼로그를 통해 사용자가 선택한 이미지를 로드하고 디스플레이에 출력합니다.
         /// </summary>
-        /// <param name="Display">출력할 디스플레이</param>
-        /// /// <param name="LogList">로그 창</param>
-        public void Load_Image(CogRecordDisplay Display, ListBox LogList)
+        /// <param name="display">이미지를 출력할 CogRecordDisplay</param>
+        /// <param name="logList">로그 출력용 ListBox</param>
+        public void Load_Image(CogRecordDisplay display, ListBox logList)
         {
-            using (OpenFileDialog dlg = new OpenFileDialog())
+            using (OpenFileDialog dlg = new OpenFileDialog
             {
-                dlg.DefaultExt = "jpg";
-                dlg.Filter = "JPEG Image (*.jpg)|*.jpg|PNG Image (*.png)|*.png|BMP Image (*.bmp)|*.bmp";
-
+                DefaultExt = "jpg",
+                Filter = "JPEG Image (*.jpg)|*.jpg|PNG Image (*.png)|*.png|BMP Image (*.bmp)|*.bmp"
+            })
+            {
                 if (dlg.ShowDialog() != DialogResult.OK || !File.Exists(dlg.FileName)) return;
 
-                using (CogImageFileTool ImageFileTool = new CogImageFileTool())
+                using (CogImageFileTool tool = new CogImageFileTool())
                 {
-                    ImageFileTool.Operator.Open(@dlg.FileName, CogImageFileModeConstants.Read);
-                    ImageFileTool.Run();
+                    tool.Operator.Open(dlg.FileName, CogImageFileModeConstants.Read);
+                    tool.Run();
+                    Util.DisplayClear(display);
 
-                    Util.DisplayClear(Display);
+                    ICogImage output = tool.OutputImage;
+                    ICogImage image = output.ToString() == "Cognex.VisionPro.CogImage24PlanarColor"
+                        ? CogImageConvert.GetIntensityImage(output, 0, 0, output.Width, output.Height) : output;
 
-                    ICogImage Image = null;
-
-                    if (ImageFileTool.OutputImage.ToString() == "Cognex.VisionPro.CogImage24PlanarColor")
-                        Image = CogImageConvert.GetIntensityImage(ImageFileTool.OutputImage, 0, 0, ImageFileTool.OutputImage.Width, ImageFileTool.OutputImage.Height);
-
-                    Display.Image = Image;
-                    DataStore.Pattern.InputImage = Display.Image;
-
-                    ImageFileTool.Operator.Close();
+                    display.Image = image;
+                    DataStore.Pattern.InputImage = image;
                 }
-                Util.PrintLog(LogList, "Image Load Successful!");
+                Util.PrintLog(logList, "Image Load Successful!");
             }
         }
-        
+
         /// <summary>
-        /// 이미지 로드 (이미지 이름 지정 - 경로: Debug\Image\xxx.bmp)
+        /// 지정된 이름의 이미지를 로드하여 디스플레이에 출력합니다. (경로: Debug\\Image\\{name}.bmp)
         /// </summary>
-        /// <param name="Display">출력 할 디스플레이</param>
-        /// <param name="name">이미지 이름</param>
-        void Load_Image(CogRecordDisplay Display, string name)
+        /// <param name="display">이미지를 출력할 CogRecordDisplay</param>
+        /// <param name="name">이미지 파일명 (확장자 제외)</param>
+        void Load_Image(CogRecordDisplay display, string name)
         {
             using (CogImageFileTool ImageFileTool = new CogImageFileTool())
             {
                 ImageFileTool.Operator.Open(@Path.Combine(Application.StartupPath, "Image", $"{name}.bmp"), CogImageFileModeConstants.Read);
                 ImageFileTool.Run();
 
-                Util.DisplayClear(Display);
-                Display.Image = ImageFileTool.OutputImage;
-
-                ImageFileTool.Operator.Close();
+                Util.DisplayClear(display);
+                display.Image = ImageFileTool.OutputImage;
             }
         }
 
         /// <summary>
-        /// 영역 ini 저장 메서드
+        /// 지정된 영역 정보를 INI 파일에 저장합니다.
         /// </summary>
-        /// <param name="section">ini_Section</param>
-        /// <param name="Region">ini_Key</param>
-        void WriteRegion(string section, CogRectangleAffine Region)
+        /// <param name="section">INI 섹션 이름</param>
+        /// <param name="region">저장할 CogRectangleAffine 객체</param>
+        void WriteRegion(string section, CogRectangleAffine region)
         {
-            WriteValue(section, "CenterX", Region.CenterX.ToString());
-            WriteValue(section, "CenterY", Region.CenterY.ToString());
-            WriteValue(section, "SideXLength", Region.SideXLength.ToString());
-            WriteValue(section, "SideYLength", Region.SideYLength.ToString());
-            WriteValue(section, "Rotation", Region.Rotation.ToString());
+            WriteValue(section, "CenterX", region.CenterX.ToString());
+            WriteValue(section, "CenterY", region.CenterY.ToString());
+            WriteValue(section, "SideXLength", region.SideXLength.ToString());
+            WriteValue(section, "SideYLength", region.SideYLength.ToString());
+            WriteValue(section, "Rotation", region.Rotation.ToString());
         }
 
         /// <summary>
-        /// 영역 ini 로드 메서드
+        /// INI 파일에서 영역 정보를 불러와 지정된 객체에 적용합니다.
         /// </summary>
-        /// <param name="section">ini_Section</param>
-        /// <param name="Region">ini_Key</param>
-        void ReadRegion(string section, CogRectangleAffine Region)
+        /// <param name="section">INI 섹션 이름</param>
+        /// <param name="region">적용 대상 CogRectangleAffine 객체</param>
+        void ReadRegion(string section, CogRectangleAffine region)
         {
-            Region.CenterX = Convert.ToDouble(ReadValue(section, "CenterX"));
-            Region.CenterY = Convert.ToDouble(ReadValue(section, "CenterY"));
-            Region.SideXLength = Convert.ToDouble(ReadValue(section, "SideXLength"));
-            Region.SideYLength = Convert.ToDouble(ReadValue(section, "SideYLength"));
-            Region.Rotation = Convert.ToDouble(ReadValue(section, "Rotation"));
+            region.CenterX = Convert.ToDouble(ReadValue(section, "CenterX"));
+            region.CenterY = Convert.ToDouble(ReadValue(section, "CenterY"));
+            region.SideXLength = Convert.ToDouble(ReadValue(section, "SideXLength"));
+            region.SideYLength = Convert.ToDouble(ReadValue(section, "SideYLength"));
+            region.Rotation = Convert.ToDouble(ReadValue(section, "Rotation"));
         }
 
         /// <summary>
-        /// 저장된 패턴 트레인
+        /// 지정된 영역과 이미지를 기반으로 패턴 학습을 수행합니다.
         /// </summary>
-        /// <param name="name">Point 패턴 or Angle 패턴</param>
-        /// <param name="Display">사용 할 디스플레이</param>
-        /// <param name="Region">트레인 서치영역</param>
-        /// <param name="Pattern">저장 할 패턴 툴</param>
-        void TrainPattern(string name, CogRecordDisplay Display, CogRectangleAffine Region, Cognex.VisionPro.PMAlign.CogPMAlignTool Pattern)
+        /// <param name="name">패턴 이름 (Point 또는 Angle)</param>
+        /// <param name="display">디스플레이 객체</param>
+        /// <param name="region">학습에 사용할 검색 영역</param>
+        /// <param name="pattern">CogPMAlignTool 인스턴스</param>
+        void TrainPattern(string name, CogRecordDisplay display, CogRectangleAffine region, Cognex.VisionPro.PMAlign.CogPMAlignTool pattern)
         {
-            Load_Image(Display, name);
+            Load_Image(display, name);
             string imagePath = Path.Combine(Application.StartupPath, "Image", "MasterImage.bmp");
             ICogImage image = Load_ImageFile(imagePath);
+
+            if (image == null) return;
 
             if (image.ToString() == "Cognex.VisionPro.CogImage24PlanarColor")
                 image = CogImageConvert.GetIntensityImage(image, 0, 0, image.Width, image.Height);
 
             DataStore.Pattern.InputImage = image;
-            ToolManager.PMAlign.Instance.TrainRun(Region, Pattern);
+            ToolManager.PMAlign.Instance.TrainRun(region, pattern);
         }
 
         /// <summary>
-        /// 파라미터 세이브
+        /// 파라미터를 INI 파일로 저장합니다.
         /// </summary>
-        /// <param name="LogList">로그 창</param>
-        public void ParamSave(ListBox LogList)
+        /// <param name="logList">로그 출력용 ListBox</param>
+        public void ParamSave(ListBox logList)
         {
             if (MessageBox.Show("Do you want to save it?", "Caution", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
 
             string path = Path.Combine(Application.StartupPath, "Param");
+            string iniPath = Path.Combine(path, "Param.ini");
 
             Directory.CreateDirectory(path);
-
-            string iniPath = Path.Combine(path, "Param.ini");
 
             if (!File.Exists(iniPath)) File.Create(iniPath).Dispose();
 
@@ -365,13 +319,15 @@ namespace VisionSystem
             WriteValue("Train", "Point", DataStore.Pattern.PTrain.ToString());
             WriteValue("Train", "Angle", DataStore.Pattern.ATrain.ToString());
 
-            Util.PrintLog(LogList, "Successfully saved parameters.");
+            Util.PrintLog(logList, "Successfully saved parameters.");
         }
 
         /// <summary>
-        /// 파라미터 로드
+        /// INI 파일에서 파라미터를 불러와 설정에 반영하고, 필요 시 패턴 학습을 수행합니다.
         /// </summary>
-        public void ParamLoad(CogRecordDisplay PDisplay, CogRecordDisplay ADisplay)
+        /// <param name="pointDisplay">Point 디스플레이</param>
+        /// <param name="angleDisplay">Angle 디스플레이</param>
+        public void ParamLoad(CogRecordDisplay pointDisplay, CogRecordDisplay angleDisplay)
         {
             string iniPath = Path.Combine(Application.StartupPath, "Param", "Param.ini");
 
@@ -392,10 +348,8 @@ namespace VisionSystem
             DataStore.Pattern.PTrain = Convert.ToBoolean(ReadValue("Train", "Point"));
             DataStore.Pattern.ATrain = Convert.ToBoolean(ReadValue("Train", "Angle"));
 
-            if (DataStore.Pattern.PTrain)
-                TrainPattern("Point", PDisplay, DataStore.RectangleRegion.PTrainRegion, DataStore.Pattern.PPattern);
-            if (DataStore.Pattern.ATrain)
-                TrainPattern("Angle", ADisplay, DataStore.RectangleRegion.ATrainRegion, DataStore.Pattern.APattern);
+            if (DataStore.Pattern.PTrain) TrainPattern("Point", pointDisplay, DataStore.RectangleRegion.PTrainRegion, DataStore.Pattern.PPattern);
+            if (DataStore.Pattern.ATrain) TrainPattern("Angle", angleDisplay, DataStore.RectangleRegion.ATrainRegion, DataStore.Pattern.APattern);
         }
     }
 }

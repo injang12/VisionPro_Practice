@@ -1,6 +1,5 @@
 ﻿using Cognex.VisionPro;
 using Cognex.VisionPro.PMAlign;
-using Cognex.VisionPro.Dimensioning;
 
 using System.Drawing;
 
@@ -9,162 +8,132 @@ namespace VisionSystem
     class GraphicManager
     {
         /// <summary>
-        /// 영역 생성
+        /// 디스플레이에 선택된 이름에 해당하는 초기 검색 영역을 표시합니다.
         /// </summary>
-        /// <param name="Display">출력 할 디스플레이</param>
-        /// <param name="SelectedBtn">선택한 버튼</param>
-        public static void InitRegion(CogRecordDisplay Display, System.Windows.Forms.Button SelectedBtn)
+        /// <param name="display">검색 영역을 표시할 CogRecordDisplay 객체</param>
+        /// <param name="selectedBtn">선택된 버튼 (이름에 따라 대응 영역 선택)</param>
+        public static void InitRegion(CogRecordDisplay display, System.Windows.Forms.Button selectedBtn)
         {
-            Util.DisplayClear(Display);
+            Util.DisplayClear(display);
 
-            CogRectangleAffine SearchRegion;
-
-            switch (SelectedBtn.Name)
+            System.Collections.Generic.Dictionary<string, CogRectangleAffine> regions = new System.Collections.Generic.Dictionary<string, CogRectangleAffine>
             {
-                case "BtnPTrainRegion":
-                    SearchRegion = DataStore.RectangleRegion.PTrainRegion;
-                    break;
-                case "BtnPRegion":
-                    SearchRegion = DataStore.RectangleRegion.PRegion;
-                    break;
-                case "BtnATrainRegion":
-                    SearchRegion = DataStore.RectangleRegion.ATrainRegion;
-                    break;
-                case "BtnARegion":
-                    SearchRegion = DataStore.RectangleRegion.ARegion;
-                    break;
-                default:
-                    return;
-            }
+                { "BtnPTrainRegion", DataStore.RectangleRegion.PTrainRegion },
+                { "BtnPRegion", DataStore.RectangleRegion.PRegion },
+                { "BtnATrainRegion", DataStore.RectangleRegion.ATrainRegion },
+                { "BtnARegion", DataStore.RectangleRegion.ARegion }
+            };
 
-            SearchRegion.GraphicDOFEnable = CogRectangleAffineDOFConstants.All;
-            SearchRegion.Interactive = true;
-            SearchRegion.Color = CogColorConstants.Cyan;
-            SearchRegion.SelectedColor = CogColorConstants.Blue;
-            SearchRegion.MouseCursor = CogStandardCursorConstants.ManipulableGraphic;
+            if (!regions.TryGetValue(selectedBtn.Name, out CogRectangleAffine searchRegion)) return;
 
-            Display.InteractiveGraphics.Add(SearchRegion, null, true);
+            searchRegion.GraphicDOFEnable = CogRectangleAffineDOFConstants.All;
+            searchRegion.Interactive = true;
+            searchRegion.Color = CogColorConstants.Cyan;
+            searchRegion.SelectedColor = CogColorConstants.Blue;
+            searchRegion.MouseCursor = CogStandardCursorConstants.ManipulableGraphic;
+
+            display.InteractiveGraphics.Add(searchRegion, null, true);
         }
 
         /// <summary>
-        /// 그래픽 라벨 생성
+        /// 디스플레이에 텍스트 라벨을 생성하여 고정 그래픽으로 추가합니다.
         /// </summary>
-        /// <param name="Display">표시 할 디스플레이</param>
-        /// <param name="color">폰트 색상</param>
-        /// <param name="font">폰트 두께</param>
-        /// <param name="text">텍스트</param>
-        /// <param name="x">좌표 X</param>
-        /// <param name="y">좌표 Y</param>
-        /// <param name="backColor">배경 색(투명 생략 가능)</param>
-        public static void CreateLabel(CogRecordDisplay Display, CogColorConstants color, Font font, string text, double x, double y, CogColorConstants backColor = CogColorConstants.None)
+        /// <param name="display">라벨을 표시할 CogRecordDisplay 객체</param>
+        /// <param name="color">텍스트 색상 (전경색)</param>
+        /// <param name="font">표시할 텍스트의 폰트 (System.Drawing.Font)</param>
+        /// <param name="text">표시할 문자열</param>
+        /// <param name="x">텍스트의 X 좌표 (픽셀 단위)</param>
+        /// <param name="y">텍스트의 Y 좌표 (픽셀 단위)</param>
+        /// <param name="backColor">텍스트 배경색. <see cref="CogColorConstants.None"/>이면 투명 처리됩니다.</param>
+        public static void CreateLabel(CogRecordDisplay display, CogColorConstants color, Font font, string text, double x, double y, CogColorConstants backColor)
         {
-            CogGraphicLabel Label = new CogGraphicLabel
+            CogGraphicLabel label = new CogGraphicLabel
             {
                 Text = text,
                 X = x,
                 Y = y,
                 Color = color,
-                Font = font
+                Font = font,
+                BackgroundColor = backColor != CogColorConstants.None ? backColor : CogColorConstants.None
             };
 
-            if (backColor != CogColorConstants.None)
-                Label.BackgroundColor = backColor;
-
-            Display.StaticGraphics.Add(Label, null);
-            Label.Dispose();
+            display.StaticGraphics.Add(label, null);
         }
 
         /// <summary>
-        /// 중앙 직선 그리기
+        /// 디스플레이 중앙에 수직 기준선(90도 회전 직선)을 추가합니다.
         /// </summary>
-        /// <param name="Display">출력 할 디스플레이</param>
-        /// <param name="x2">점2의 x값</param>
-        /// <param name="y2">점2의 y값</param>
+        /// <param name="Display">기준선을 표시할 CogRecordDisplay 객체</param>
+        /// <param name="x2">기준선 중심점의 X 좌표</param>
+        /// <param name="y2">기준선 중심점의 Y 좌표</param>
         public static void CreateCenterLineGraphics(CogRecordDisplay Display, double x2, double y2)
         {
-            CogCreateLineTool CreateLineTool = new CogCreateLineTool()
+            Cognex.VisionPro.Dimensioning.CogCreateLineTool CreateLineTool = new Cognex.VisionPro.Dimensioning.CogCreateLineTool()
             {
                 InputImage = DataStore.Pattern.InputImage,
                 OutputColor = CogColorConstants.Yellow,
-                OutputLineWidthInScreenPixels = 3
+                OutputLineWidthInScreenPixels = 3,
+                Line = { X = x2, Y = y2, Rotation = Util.RadianDegreeConvert("R", 90) }
             };
 
-            CreateLineTool.Line.X = x2;
-            CreateLineTool.Line.Y = y2;
-            CreateLineTool.Line.Rotation = Util.RadianDegreeConvert("R", 90);
-
             CreateLineTool.Run();
-
             Display.StaticGraphics.Add(CreateLineTool.GetOutputLine(), null);
         }
 
         /// <summary>
-        /// 두 점의 직선 그리기
+        /// 디스플레이에 두 점을 잇는 직선을 추가합니다.
         /// </summary>
-        /// <param name="Display">출력 할 디스플레이</param>
-        /// <param name="x1">점1의 x값</param>
-        /// <param name="y1">점1의 y값</param>
-        /// <param name="x2">점2의 x값</param>
-        /// <param name="y2">점2의 y값</param>
+        /// <param name="Display">직선을 표시할 CogRecordDisplay 객체</param>
+        /// <param name="x1">종단점의 X 좌표</param>
+        /// <param name="y1">종단점의 Y 좌표</param>
+        /// <param name="x2">시작점의 X 좌표</param>
+        /// <param name="y2">시작점의 Y 좌표</param>
         public static void CreateSegmentGraphics(CogRecordDisplay Display, double x1, double y1, double x2, double y2)
         {
-            CogCreateSegmentTool CreateSegmentTool = new CogCreateSegmentTool
+            Cognex.VisionPro.Dimensioning.CogCreateSegmentTool CreateSegmentTool = new Cognex.VisionPro.Dimensioning.CogCreateSegmentTool
             {
                 InputImage = DataStore.Pattern.InputImage,
                 OutputColor = CogColorConstants.Magenta,
-                OutputLineWidthInScreenPixels = 3
+                OutputLineWidthInScreenPixels = 3,
+                Segment = { StartX = x2, StartY = y2, EndX = x1, EndY = y1 }
             };
 
-            CreateSegmentTool.Segment.StartX = x2;
-            CreateSegmentTool.Segment.StartY = y2;
-            CreateSegmentTool.Segment.EndX = x1;
-            CreateSegmentTool.Segment.EndY = y1;
-
             CreateSegmentTool.Run();
-
             Display.StaticGraphics.Add(CreateSegmentTool.GetOutputSegment(), null);
         }
 
         /// <summary>
-        /// 패턴 결과 그래픽 그리기
+        /// 패턴 매칭 결과를 디스플레이에 시각화하고, 정합 여부에 따라 결과 라벨을 표시합니다.
         /// </summary>
-        /// <param name="Display">사용 할 디스플레이</param>
-        /// <param name="PMAlignTool">패턴 툴</param>
-        /// <param name="SearchRegion">서치 영역</param>
-        /// <returns>bool</returns>
+        /// <param name="Display">결과를 표시할 CogRecordDisplay 객체</param>
+        /// <param name="PMAlignTool">실행된 CogPMAlignTool 객체</param>
+        /// <param name="SearchRegion">매칭에 사용된 검색 영역. 실패 시 표시 색이 변경됩니다.</param>
+        /// <returns>매칭 결과가 유효하고 허용 임계값을 통과하면 true, 그렇지 않으면 false 반환</returns>
         public static bool PatternResultGraphics(CogRecordDisplay Display, CogPMAlignTool PMAlignTool, CogRectangleAffine SearchRegion)
         {
-            if (PMAlignTool.Results == null || PMAlignTool.Results.Count <= 0)
+            CogPMAlignResults Result = PMAlignTool.Results;
+
+            if (Result == null || Result.Count == 0)
             {
                 SearchRegion.Color = CogColorConstants.Red;
                 SearchRegion.XDirectionAdornment = CogRectangleAffineDirectionAdornmentConstants.None;
                 SearchRegion.YDirectionAdornment = CogRectangleAffineDirectionAdornmentConstants.None;
 
                 Display.StaticGraphics.Add(SearchRegion, "");
-
-                CreateLabel(Display, CogColorConstants.Red, new Font("Segoe UI", 50f), "NG", 300, 200);
-
+                CreateLabel(Display, CogColorConstants.Red, new Font("Segoe UI", 50f), "NG", 300, 200, CogColorConstants.None);
                 return false;
             }
 
-            CogCompositeShape ResultGraphics = PMAlignTool.Results[0].CreateResultGraphics(CogPMAlignResultGraphicConstants.MatchRegion | CogPMAlignResultGraphicConstants.Origin);
+            Display.StaticGraphics.Add(Result[0].CreateResultGraphics(CogPMAlignResultGraphicConstants.MatchRegion | CogPMAlignResultGraphicConstants.Origin), null);
 
-            Display.StaticGraphics.Add(ResultGraphics, null);
+            double x = Result[0].GetPose().TranslationX;
+            double y = Result[0].GetPose().TranslationY;
 
-            double PointX = PMAlignTool.Results[0].GetPose().TranslationX;
-            double PointY = PMAlignTool.Results[0].GetPose().TranslationY;
+            CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), $"Score: {Result[0].Score * 100:0}", x, y + 150, CogColorConstants.Black);
+            CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), $"X: {x:0.00}, Y: {y:0.00}", x, y + 200, CogColorConstants.Black);
 
-            string strScore = $"Score: {PMAlignTool.Results[0].Score * 100:0}";
-            string strPos = $"X: {PointX:0.00}, Y: {PointY:0.00}";
-
-            CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), strScore, PointX, PointY + 150, CogColorConstants.Black);
-            CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), strPos, PointX, PointY + 200, CogColorConstants.Black);
-
-            if (PMAlignTool.Results[0].Score > PMAlignTool.RunParams.AcceptThreshold)
-                CreateLabel(Display, CogColorConstants.Green, new Font("Segoe UI", 50f), "OK", 300, 200);
-            else
-                CreateLabel(Display, CogColorConstants.Red, new Font("Segoe UI", 50f), "NG", 300, 200);
-
+            bool isOk = Result[0].Score > PMAlignTool.RunParams.AcceptThreshold;
+            CreateLabel(Display, isOk ? CogColorConstants.Green : CogColorConstants.Red, new Font("Segoe UI", 50f), isOk ? "OK" : "NG", 300, 200, CogColorConstants.None);
             return true;
         }
     }
