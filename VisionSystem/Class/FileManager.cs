@@ -9,8 +9,6 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using static VisionSystem.DataStore;
-
 namespace VisionSystem
 {
     internal class FileManager
@@ -185,7 +183,7 @@ namespace VisionSystem
                 image = CogImageConvert.GetIntensityImage(image, 0, 0, image.Width, image.Height);
 
             Display.Image = image;
-            Pattern.InputImage = image;
+            DataStore.Pattern.InputImage = image;
 
             ToolManager.RunManual(Display, LogList);
             CurrentImage.Text = Path.GetFileName(SetupImageFileName[ImageIndex]);
@@ -263,7 +261,7 @@ namespace VisionSystem
                         Image = CogImageConvert.GetIntensityImage(ImageFileTool.OutputImage, 0, 0, ImageFileTool.OutputImage.Width, ImageFileTool.OutputImage.Height);
 
                     Display.Image = Image;
-                    Pattern.InputImage = Display.Image;
+                    DataStore.Pattern.InputImage = Display.Image;
 
                     ImageFileTool.Operator.Close();
                 }
@@ -334,7 +332,7 @@ namespace VisionSystem
             if (image.ToString() == "Cognex.VisionPro.CogImage24PlanarColor")
                 image = CogImageConvert.GetIntensityImage(image, 0, 0, image.Width, image.Height);
 
-            Pattern.InputImage = image;
+            DataStore.Pattern.InputImage = image;
             ToolManager.PMAlign.Instance.TrainRun(Region, Pattern);
         }
 
@@ -356,18 +354,18 @@ namespace VisionSystem
 
             Set_INI_Path(iniPath);
 
-            WriteValue("PPattern", "Threshold", Pattern.PThreshold.ToString());
-            WriteValue("PPattern", "Angle", Pattern.PAngle.ToString());
-            WriteValue("APattern", "Threshold", Pattern.AThreshold.ToString());
-            WriteValue("APattern", "Angle", Pattern.AAngle.ToString());
+            WriteValue("PPattern", "Threshold", DataStore.Pattern.PThreshold.ToString());
+            WriteValue("PPattern", "Angle", DataStore.Pattern.PAngle.ToString());
+            WriteValue("APattern", "Threshold", DataStore.Pattern.AThreshold.ToString());
+            WriteValue("APattern", "Angle", DataStore.Pattern.AAngle.ToString());
 
-            WriteRegion("PTrain", RectangleRegion.PTrainRegion);
-            WriteRegion("PSearch", RectangleRegion.PRegion);
-            WriteRegion("ATrain", RectangleRegion.ATrainRegion);
-            WriteRegion("ASearch", RectangleRegion.ARegion);
+            WriteRegion("PTrain", DataStore.RectangleRegion.PTrainRegion);
+            WriteRegion("PSearch", DataStore.RectangleRegion.PRegion);
+            WriteRegion("ATrain", DataStore.RectangleRegion.ATrainRegion);
+            WriteRegion("ASearch", DataStore.RectangleRegion.ARegion);
 
-            WriteValue("Train", "Point", Pattern.PTrain.ToString());
-            WriteValue("Train", "Angle", Pattern.ATrain.ToString());
+            WriteValue("Train", "Point", DataStore.Pattern.PTrain.ToString());
+            WriteValue("Train", "Angle", DataStore.Pattern.ATrain.ToString());
 
             Utilities.PrintLog(LogList, "Successfully saved parameters.");
         }
@@ -383,23 +381,23 @@ namespace VisionSystem
 
             Set_INI_Path(iniPath);
 
-            Pattern.PThreshold = Convert.ToDouble(ReadValue("PPattern", "Threshold"));
-            Pattern.PAngle = Convert.ToDouble(ReadValue("PPattern", "Angle"));
-            Pattern.AThreshold = Convert.ToDouble(ReadValue("APattern", "Threshold"));
-            Pattern.AAngle = Convert.ToDouble(ReadValue("APattern", "Angle"));
+            DataStore.Pattern.PThreshold = Convert.ToDouble(ReadValue("PPattern", "Threshold"));
+            DataStore.Pattern.PAngle = Convert.ToDouble(ReadValue("PPattern", "Angle"));
+            DataStore.Pattern.AThreshold = Convert.ToDouble(ReadValue("APattern", "Threshold"));
+            DataStore.Pattern.AAngle = Convert.ToDouble(ReadValue("APattern", "Angle"));
 
-            ReadRegion("PTrain", RectangleRegion.PTrainRegion);
-            ReadRegion("PSearch", RectangleRegion.PRegion);
-            ReadRegion("ATrain", RectangleRegion.ATrainRegion);
-            ReadRegion("ASearch", RectangleRegion.ARegion);
+            ReadRegion("PTrain", DataStore.RectangleRegion.PTrainRegion);
+            ReadRegion("PSearch", DataStore.RectangleRegion.PRegion);
+            ReadRegion("ATrain", DataStore.RectangleRegion.ATrainRegion);
+            ReadRegion("ASearch", DataStore.RectangleRegion.ARegion);
 
-            Pattern.PTrain = Convert.ToBoolean(ReadValue("Train", "Point"));
-            Pattern.ATrain = Convert.ToBoolean(ReadValue("Train", "Angle"));
+            DataStore.Pattern.PTrain = Convert.ToBoolean(ReadValue("Train", "Point"));
+            DataStore.Pattern.ATrain = Convert.ToBoolean(ReadValue("Train", "Angle"));
 
-            if (Pattern.PTrain)
-                TrainPattern("Point", SetupForm.Instance.PDisplay, RectangleRegion.PTrainRegion, Pattern.PPattern);
-            if (Pattern.ATrain)
-                TrainPattern("Angle", SetupForm.Instance.ADisplay, RectangleRegion.ATrainRegion, Pattern.APattern);
+            if (DataStore.Pattern.PTrain)
+                TrainPattern("Point", SetupForm.Instance.PDisplay, DataStore.RectangleRegion.PTrainRegion, DataStore.Pattern.PPattern);
+            if (DataStore.Pattern.ATrain)
+                TrainPattern("Angle", SetupForm.Instance.ADisplay, DataStore.RectangleRegion.ATrainRegion, DataStore.Pattern.APattern);
         }
     }
 }
