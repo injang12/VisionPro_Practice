@@ -45,7 +45,7 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.LogList = new System.Windows.Forms.ListBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.TxtCurrentImage = new System.Windows.Forms.Label();
+            this.LabelImageName = new System.Windows.Forms.Label();
             this.ChkPoint = new System.Windows.Forms.CheckBox();
             this.ChkAngle = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -138,7 +138,7 @@
             this.BtnPreImage.TabIndex = 6;
             this.BtnPreImage.Text = "Pre\r\nImage";
             this.BtnPreImage.UseVisualStyleBackColor = true;
-            this.BtnPreImage.Click += new System.EventHandler(this.BtnTurnImage_Click);
+            this.BtnPreImage.Click += new System.EventHandler(this.TurnImage);
             // 
             // BtnFolder
             // 
@@ -168,7 +168,7 @@
             this.BtnNextImage.TabIndex = 2;
             this.BtnNextImage.Text = "Next\r\nImage";
             this.BtnNextImage.UseVisualStyleBackColor = true;
-            this.BtnNextImage.Click += new System.EventHandler(this.BtnTurnImage_Click);
+            this.BtnNextImage.Click += new System.EventHandler(this.TurnImage);
             // 
             // panel4
             // 
@@ -299,15 +299,15 @@
             this.label2.TabIndex = 7;
             this.label2.Text = "Current Image :";
             // 
-            // TxtCurrentImage
+            // LabelImageName
             // 
-            this.TxtCurrentImage.AutoSize = true;
-            this.TxtCurrentImage.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.TxtCurrentImage.Location = new System.Drawing.Point(1164, 650);
-            this.TxtCurrentImage.Name = "TxtCurrentImage";
-            this.TxtCurrentImage.Size = new System.Drawing.Size(39, 21);
-            this.TxtCurrentImage.TabIndex = 8;
-            this.TxtCurrentImage.Text = "Null";
+            this.LabelImageName.AutoSize = true;
+            this.LabelImageName.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.LabelImageName.Location = new System.Drawing.Point(1164, 650);
+            this.LabelImageName.Name = "LabelImageName";
+            this.LabelImageName.Size = new System.Drawing.Size(39, 21);
+            this.LabelImageName.TabIndex = 8;
+            this.LabelImageName.Text = "Null";
             // 
             // ChkPoint
             // 
@@ -319,7 +319,7 @@
             this.ChkPoint.TabIndex = 9;
             this.ChkPoint.Text = "PointPattern";
             this.ChkPoint.UseVisualStyleBackColor = true;
-            this.ChkPoint.CheckedChanged += new System.EventHandler(this.ChkBox_Check);
+            this.ChkPoint.CheckedChanged += new System.EventHandler(this.SelectChkBox);
             // 
             // ChkAngle
             // 
@@ -331,7 +331,7 @@
             this.ChkAngle.TabIndex = 11;
             this.ChkAngle.Text = "AnglePattern";
             this.ChkAngle.UseVisualStyleBackColor = true;
-            this.ChkAngle.CheckedChanged += new System.EventHandler(this.ChkBox_Check);
+            this.ChkAngle.CheckedChanged += new System.EventHandler(this.SelectChkBox);
             // 
             // groupBox1
             // 
@@ -802,7 +802,7 @@
             this.ClientSize = new System.Drawing.Size(1680, 864);
             this.Controls.Add(this.PnlPattern);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.TxtCurrentImage);
+            this.Controls.Add(this.LabelImageName);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.LeftPanel);
@@ -857,7 +857,7 @@
         private System.Windows.Forms.Button BtnNextImage;
         private System.Windows.Forms.Button BtnPreImage;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label TxtCurrentImage;
+        private System.Windows.Forms.Label LabelImageName;
         private System.Windows.Forms.CheckBox ChkPoint;
         private System.Windows.Forms.CheckBox ChkAngle;
         private System.Windows.Forms.GroupBox groupBox1;

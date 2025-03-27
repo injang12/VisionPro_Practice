@@ -3,7 +3,6 @@ using Cognex.VisionPro.PMAlign;
 using Cognex.VisionPro.Dimensioning;
 
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace VisionSystem
 {
@@ -14,9 +13,9 @@ namespace VisionSystem
         /// </summary>
         /// <param name="Display">출력 할 디스플레이</param>
         /// <param name="SelectedBtn">선택한 버튼</param>
-        public static void InitRegion(CogRecordDisplay Display, Button SelectedBtn)
+        public static void InitRegion(CogRecordDisplay Display, System.Windows.Forms.Button SelectedBtn)
         {
-            Utilities.DisplayClear(Display);
+            Util.DisplayClear(Display);
 
             CogRectangleAffine SearchRegion;
 
@@ -92,7 +91,7 @@ namespace VisionSystem
 
             CreateLineTool.Line.X = x2;
             CreateLineTool.Line.Y = y2;
-            CreateLineTool.Line.Rotation = Utilities.RadianDegreeConvert("R", 90);
+            CreateLineTool.Line.Rotation = Util.RadianDegreeConvert("R", 90);
 
             CreateLineTool.Run();
 

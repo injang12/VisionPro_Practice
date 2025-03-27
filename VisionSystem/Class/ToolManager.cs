@@ -1,10 +1,7 @@
 ﻿using Cognex.VisionPro;
 using Cognex.VisionPro.PMAlign;
 
-using System;
-using System.IO;
 using System.Drawing;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace VisionSystem
@@ -27,17 +24,17 @@ namespace VisionSystem
         /// <param name="LogList">로그 창 지정</param>
         public static void RunManual(CogRecordDisplay Display, ListBox LogList)
         {
-            Utilities.DisplayClear(Display);
+            Util.DisplayClear(Display);
 
-            if (!Pattern.PatternRun(Display, "BtnPRun", "", LogList)) return;
-            if (!Pattern.PatternRun(Display, "BtnARun", "ManualRun", LogList)) return;
+            if (!Pattern.Run(Display, "BtnPRun", "", LogList)) return;
+            if (!Pattern.Run(Display, "BtnARun", "ManualRun", LogList)) return;
 
             double x1 = DataStore.Pattern.PPattern.Results[0].GetPose().TranslationX;
             double y1 = DataStore.Pattern.PPattern.Results[0].GetPose().TranslationY;
             double x2 = DataStore.Pattern.APattern.Results[0].GetPose().TranslationX;
             double y2 = DataStore.Pattern.APattern.Results[0].GetPose().TranslationY;
 
-            double resultAngle = Utilities.PointToPointAngleAndGraphics(x1, y1, x2, y2);
+            double resultAngle = Util.PointToPointAngleAndGraphics(x1, y1, x2, y2);
 
             GraphicManager.CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), $"Angle: {resultAngle:0.00}", x2 - 200, y2 + 100, CogColorConstants.Black);
 
@@ -55,11 +52,11 @@ namespace VisionSystem
         /// <param name="BtnFolder">폴더 지정 버튼 비활성화</param>
         /// <param name="BtnExit">종료 버튼 비활성화</param>
         /// <param name="CurrentImageName">현재 이미지 이름</param>
-        public void AutoInspection(CogRecordDisplay Display, ListBox LogList, Button BtnSetup, Button BtnFolder, Button BtnExit, Label CurrentImageName)
+        public void AutoInsp(CogRecordDisplay Display, ListBox LogList, Button BtnSetup, Button BtnFolder, Button BtnExit, Label CurrentImageName)
         {
             if (FManager.MainImageFileName.Count == 0)
             {
-                Utilities.PrintLog(LogList, "Image folder is not registered...");
+                Util.PrintLog(LogList, "Image folder is not registered...");
                 return;
             }
 
@@ -72,7 +69,7 @@ namespace VisionSystem
                 BtnSetup.BackColor = Color.FromArgb(40, 40, 40);
                 BtnExit.Enabled = true;
                 BtnExit.BackColor = Color.FromArgb(40, 40, 40);
-                Utilities.PrintLog(LogList, "Stop automatic inspection...");
+                Util.PrintLog(LogList, "Stop automatic inspection...");
                 return;
             }
             else
@@ -87,9 +84,9 @@ namespace VisionSystem
                 BtnSetup.BackColor = Color.Red;
                 BtnExit.Enabled = false;
                 BtnExit.BackColor = Color.Red;
-                Utilities.PrintLog(LogList, "Start automatic inspection...");
+                Util.PrintLog(LogList, "Start automatic inspection...");
 
-                Thread InspThread = new Thread(() =>
+                System.Threading.Thread InspThread = new System.Threading.Thread(() =>
                 {
                     while (isStart)
                     {
@@ -97,14 +94,14 @@ namespace VisionSystem
 
                         if (isStop)
                         {
-                            BtnFolder.Invoke(new Action(() => BtnFolder.Enabled = true));
-                            BtnFolder.Invoke(new Action(() => BtnFolder.BackColor = Color.FromArgb(40, 40, 40)));
-                            BtnSetup.Invoke(new Action(() => BtnSetup.Enabled = true));
-                            BtnSetup.Invoke(new Action(() => BtnSetup.BackColor = Color.FromArgb(40, 40, 40)));
-                            BtnExit.Invoke(new Action(() => BtnExit.Enabled = true));
-                            BtnExit.Invoke(new Action(() => BtnExit.BackColor = Color.FromArgb(40, 40, 40)));
+                            BtnFolder.Invoke(new System.Action(() => BtnFolder.Enabled = true));
+                            BtnFolder.Invoke(new System.Action(() => BtnFolder.BackColor = Color.FromArgb(40, 40, 40)));
+                            BtnSetup.Invoke(new System.Action(() => BtnSetup.Enabled = true));
+                            BtnSetup.Invoke(new System.Action(() => BtnSetup.BackColor = Color.FromArgb(40, 40, 40)));
+                            BtnExit.Invoke(new System.Action(() => BtnExit.Enabled = true));
+                            BtnExit.Invoke(new System.Action(() => BtnExit.BackColor = Color.FromArgb(40, 40, 40)));
 
-                            LogList.Invoke(new Action(() => Utilities.PrintLog(LogList, "Automatic inspection completed!!")));
+                            LogList.Invoke(new System.Action(() => Util.PrintLog(LogList, "Automatic inspection completed!!")));
                         }
                     }
                     
@@ -133,7 +130,7 @@ namespace VisionSystem
 
             ICogImage image = FManager.Load_ImageFile(FManager.MainImageFileName[count]);
 
-            CurrentImageName.Invoke(new Action(() => CurrentImageName.Text = Path.GetFileName(FManager.MainImageFileName[count])));
+            CurrentImageName.Invoke(new System.Action(() => CurrentImageName.Text = System.IO.Path.GetFileName(FManager.MainImageFileName[count])));
 
             if (image is CogImage24PlanarColor)
                 image = CogImageConvert.GetIntensityImage(image, 0, 0, image.Width, image.Height);
@@ -143,17 +140,17 @@ namespace VisionSystem
 
             count++;
 
-            Utilities.DisplayClear(Display);
+            Util.DisplayClear(Display);
 
-            if (!Pattern.PatternRun(Display, "BtnPRun", null)) return;
-            if (!Pattern.PatternRun(Display, "BtnARun", null)) return;
+            if (!Pattern.Run(Display, "BtnPRun", null)) return;
+            if (!Pattern.Run(Display, "BtnARun", null)) return;
 
             double x1 = DataStore.Pattern.PPattern.Results[0].GetPose().TranslationX;
             double y1 = DataStore.Pattern.PPattern.Results[0].GetPose().TranslationY;
             double x2 = DataStore.Pattern.APattern.Results[0].GetPose().TranslationX;
             double y2 = DataStore.Pattern.APattern.Results[0].GetPose().TranslationY;
 
-            double resultAngle = Utilities.PointToPointAngleAndGraphics(x1, y1, x2, y2);
+            double resultAngle = Util.PointToPointAngleAndGraphics(x1, y1, x2, y2);
 
             GraphicManager.CreateLabel(Display, CogColorConstants.White, new Font("Segoe UI", 15f), $"Angle: {resultAngle:0.00}", x2 - 200, y2 + 100, CogColorConstants.Black);
 
@@ -163,18 +160,26 @@ namespace VisionSystem
 
             double time = DataStore.InspDelay * 1000;
 
-            Thread.Sleep((int)time);      /* 검사 속도 조절 */
+            System.Threading.Thread.Sleep((int)time);      /* 검사 속도 조절 */
         }
 
         public class PMAlign
         {
             public static PMAlign Instance { get; private set; } = new PMAlign();
             
-            public void PatternTrain(CogRecordDisplay SDisplay, CogRecordDisplay PDisplay, CogRecordDisplay ADisplay, ListBox LogList, Button BtnTrain)
+            /// <summary>
+            /// point or angle 패턴 트레인
+            /// </summary>
+            /// <param name="SDisplay">셋업 디스플레이</param>
+            /// <param name="PDisplay">point 디스플레이</param>
+            /// <param name="ADisplay">angle 디스플레이</param>
+            /// <param name="LogList">로그 창</param>
+            /// <param name="BtnTrain">트레인 버튼</param>
+            public void Train(CogRecordDisplay SDisplay, CogRecordDisplay PDisplay, CogRecordDisplay ADisplay, ListBox LogList, Button BtnTrain)
             {
                 if (SDisplay.Image == null)
                 {
-                    Utilities.PrintLog(LogList, "There is no image.");
+                    Util.PrintLog(LogList, "There is no image.");
                     return;
                 }
 
@@ -215,24 +220,26 @@ namespace VisionSystem
                         break;
                 }
 
-                Utilities.DisplayClear(SDisplay);
+                Util.DisplayClear(SDisplay);
 
-                string imagePath = Path.Combine(Application.StartupPath, "Image");
-                Directory.CreateDirectory(imagePath);
+                string imagePath = System.IO.Path.Combine(Application.StartupPath, "Image");
+                System.IO.Directory.CreateDirectory(imagePath);
 
                 Display.Image = DataStore.Pattern.TrainImage;
 
                 FileManager FManager = FileManager.Instance;
-                FManager.Save_ImageFile(Path.Combine(imagePath, $"{toolName}.bmp"), Display.Image);
-                FManager.Save_ImageFile(Path.Combine(imagePath, "MasterImage.bmp"), SDisplay.Image);
+                FManager.Save_ImageFile(System.IO.Path.Combine(imagePath, $"{toolName}.bmp"), Display.Image);
+                FManager.Save_ImageFile(System.IO.Path.Combine(imagePath, "MasterImage.bmp"), SDisplay.Image);
 
-                Utilities.PrintLog(LogList, "Image Train and Save Complete!");
+                Util.PrintLog(LogList, "Image Train and Save Complete!");
             }
 
             /// <summary>
             /// 패턴 학습
             /// </summary>
             /// <param name="TrainRegion">트레인 할 형상의 영역</param>
+            /// <param name="PMAlignTool">패턴 툴</param>
+            /// <returns>bool</returns>
             public bool TrainRun(CogRectangleAffine TrainRegion, CogPMAlignTool PMAlignTool)
             {
                 if (DataStore.Pattern.InputImage == null) return false;
@@ -250,7 +257,7 @@ namespace VisionSystem
 
                     return true;
                 }
-                catch (Exception)
+                catch (System.Exception)
                 {
                     return false;
                 }
@@ -262,14 +269,14 @@ namespace VisionSystem
             /// <param name="Display">입출력 디스플레이</param>
             /// <param name="name">Point, Angle 구분</param>
             /// <param name="mode">Run, Manual 구분</param>
-            /// <param name="LogList">출력 할 로그 창</param>
-            public bool PatternRun(CogRecordDisplay Display, string name, string mode, ListBox LogList = null)
+            /// <param name="LogList">로그 창</param>
+            public bool Run(CogRecordDisplay Display, string name, string mode, ListBox LogList = null)
             {
-                if (mode == "Run") Utilities.DisplayClear(Display);
+                if (mode == "Run") Util.DisplayClear(Display);
 
                 if (Display.Image == null)
                 {
-                    if (LogList != null) Utilities.PrintLog(LogList, "There is no image.");
+                    if (LogList != null) Util.PrintLog(LogList, "There is no image.");
                     return false;
                 }
 
@@ -296,7 +303,7 @@ namespace VisionSystem
 
                 if (!PMAlignTool.Pattern.Trained)
                 {
-                    if (LogList != null) Utilities.PrintLog(LogList, "There are no registered patterns.");
+                    if (LogList != null) Util.PrintLog(LogList, "There are no registered patterns.");
                     return false;
                 } 
 
@@ -315,10 +322,10 @@ namespace VisionSystem
                 switch (mode)
                 {
                     case "Run":
-                        Utilities.PrintLog(LogList, "Pattern run complete!");
+                        Util.PrintLog(LogList, "Pattern run complete!");
                         break;
                     case "ManualRun":
-                        Utilities.PrintLog(LogList, "Manual run complete!");
+                        Util.PrintLog(LogList, "Manual run complete!");
                         break;
                     default:
                         break;

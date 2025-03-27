@@ -115,7 +115,7 @@
   <ItemGroup>
     <Compile Include="Class\DataStore.cs" />
     <Compile Include="Class\FileManager.cs" />
-    <Compile Include="Class\Utilities.cs" />
+    <Compile Include="Class\Util.cs" />
     <Compile Include="Form\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

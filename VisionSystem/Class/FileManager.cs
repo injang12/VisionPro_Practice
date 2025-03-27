@@ -3,11 +3,9 @@ using Cognex.VisionPro.ImageFile;
 
 using System;
 using System.IO;
-using System.Text;
 using System.Linq;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace VisionSystem
 {
@@ -19,11 +17,11 @@ namespace VisionSystem
         public List<string> MainImageFileName { get; set; } = new List<string>();
         int ImageIndex { get; set; } = -1;
 
-        [DllImport("kernel32")]
+        [System.Runtime.InteropServices.DllImport("kernel32")]
         static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
 
-        [DllImport("kernel32")]
-        static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
+        [System.Runtime.InteropServices.DllImport("kernel32")]
+        static extern int GetPrivateProfileString(string section, string key, string def, System.Text.StringBuilder retVal, int size, string filePath);
 
         string INIPath { get; set; }
 
@@ -41,7 +39,7 @@ namespace VisionSystem
         /// <returns>string</returns>
         string ReadValue(string Section, string Key)
         {
-            StringBuilder strValue = new StringBuilder(255);
+            System.Text.StringBuilder strValue = new System.Text.StringBuilder(255);
             GetPrivateProfileString(Section, Key, "", strValue, 255, INIPath);
             return strValue.ToString();
         }
@@ -78,7 +76,7 @@ namespace VisionSystem
 
                     if (string.IsNullOrEmpty(folderPath))
                     {
-                        Utilities.PrintLog(LogList, "Failed to specify folder...");
+                        Util.PrintLog(LogList, "Failed to specify folder...");
                         return;
                     }
 
@@ -96,11 +94,11 @@ namespace VisionSystem
                     if (FileName.Count > 0)
                     {
                         ImageIndex = 0;
-                        Utilities.PrintLog(LogList, $"Directory specified successfully! {FileName.Count} images found.");
+                        Util.PrintLog(LogList, $"Directory specified successfully! {FileName.Count} images found.");
                     }
-                    else Utilities.PrintLog(LogList, "No valid image files found in the selected folder.");
+                    else Util.PrintLog(LogList, "No valid image files found in the selected folder.");
                 }
-                else Utilities.PrintLog(LogList, "Failed to specify folder...");
+                else Util.PrintLog(LogList, "Failed to specify folder...");
             }
         }
 
@@ -112,7 +110,7 @@ namespace VisionSystem
         {
             if (SetupImageFileName.Count == 0)
             {
-                Utilities.PrintLog(LogList, "The specified folder does not exist...");
+                Util.PrintLog(LogList, "The specified folder does not exist...");
                 return null;
             }
 
@@ -130,7 +128,7 @@ namespace VisionSystem
         {
             if (SetupImageFileName.Count == 0)
             {
-                Utilities.PrintLog(LogList, "The specified folder does not exist...");
+                Util.PrintLog(LogList, "The specified folder does not exist...");
                 return null;
             }
 
@@ -148,7 +146,7 @@ namespace VisionSystem
         /// <param name="CurrentImage">현재 이미지 이름</param>
         /// <param name="specify">폴더 지정(true) or 이미지 넘기기(false)</param>
         /// <param name="BtnPath">이미지 넘기기 버튼(이전, 다음 이미지)</param>
-        public void TurnImageOver(CogRecordDisplay Display, ListBox LogList, Label CurrentImage, bool specify, Button BtnPath = null)
+        public void ImageChange(CogRecordDisplay Display, ListBox LogList, Label CurrentImage, bool specify, Button BtnPath = null)
         {
             string path = null;
 
@@ -253,7 +251,7 @@ namespace VisionSystem
                     ImageFileTool.Operator.Open(@dlg.FileName, CogImageFileModeConstants.Read);
                     ImageFileTool.Run();
 
-                    Utilities.DisplayClear(Display);
+                    Util.DisplayClear(Display);
 
                     ICogImage Image = null;
 
@@ -265,7 +263,7 @@ namespace VisionSystem
 
                     ImageFileTool.Operator.Close();
                 }
-                Utilities.PrintLog(LogList, "Image Load Successful!");
+                Util.PrintLog(LogList, "Image Load Successful!");
             }
         }
         
@@ -281,7 +279,7 @@ namespace VisionSystem
                 ImageFileTool.Operator.Open(@Path.Combine(Application.StartupPath, "Image", $"{name}.bmp"), CogImageFileModeConstants.Read);
                 ImageFileTool.Run();
 
-                Utilities.DisplayClear(Display);
+                Util.DisplayClear(Display);
                 Display.Image = ImageFileTool.OutputImage;
 
                 ImageFileTool.Operator.Close();
@@ -367,13 +365,13 @@ namespace VisionSystem
             WriteValue("Train", "Point", DataStore.Pattern.PTrain.ToString());
             WriteValue("Train", "Angle", DataStore.Pattern.ATrain.ToString());
 
-            Utilities.PrintLog(LogList, "Successfully saved parameters.");
+            Util.PrintLog(LogList, "Successfully saved parameters.");
         }
 
         /// <summary>
         /// 파라미터 로드
         /// </summary>
-        public void ParamLoad()
+        public void ParamLoad(CogRecordDisplay PDisplay, CogRecordDisplay ADisplay)
         {
             string iniPath = Path.Combine(Application.StartupPath, "Param", "Param.ini");
 
@@ -395,9 +393,9 @@ namespace VisionSystem
             DataStore.Pattern.ATrain = Convert.ToBoolean(ReadValue("Train", "Angle"));
 
             if (DataStore.Pattern.PTrain)
-                TrainPattern("Point", SetupForm.Instance.PDisplay, DataStore.RectangleRegion.PTrainRegion, DataStore.Pattern.PPattern);
+                TrainPattern("Point", PDisplay, DataStore.RectangleRegion.PTrainRegion, DataStore.Pattern.PPattern);
             if (DataStore.Pattern.ATrain)
-                TrainPattern("Angle", SetupForm.Instance.ADisplay, DataStore.RectangleRegion.ATrainRegion, DataStore.Pattern.APattern);
+                TrainPattern("Angle", ADisplay, DataStore.RectangleRegion.ATrainRegion, DataStore.Pattern.APattern);
         }
     }
 }

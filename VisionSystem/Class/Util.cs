@@ -1,12 +1,8 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-
-using Cognex.VisionPro;
+﻿using System.Windows.Forms;
 
 namespace VisionSystem
 {
-    internal class Utilities
+    internal class Util
     {
         /// <summary>
         /// 라디안 or 디그리 변환
@@ -14,15 +10,19 @@ namespace VisionSystem
         /// <param name="convertName">변환 하고 싶은 이름 R or D</param>
         /// <param name="currentValue">변환 전 각도 값</param>
         /// <returns>double</returns>
-        /// <exception cref="ArgumentException"></exception>
         public static double RadianDegreeConvert(string convertName, double currentValue)
         {
             convertName = convertName.ToLower();
 
-            if (convertName == "r") return currentValue * (Math.PI / 180);
-            else if (convertName == "d") return currentValue * (180.0 / Math.PI);
-
-            throw new ArgumentException("Invalid conversion type. Please enter 'R' or 'D'.");
+            switch (convertName)
+            {
+                case "r":
+                    return currentValue * (System.Math.PI / 180);
+                case "d":
+                    return currentValue * (180.0 / System.Math.PI);
+                default:
+                    return 0;
+            }
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace VisionSystem
             double dy = y2 - y1;
 
             // 각도 계산
-            double thetaRad = Math.Atan2(dy, dx);
+            double thetaRad = System.Math.Atan2(dy, dx);
 
             // 0°를 위쪽(↑)으로 변환 90° 빼기
             double resultAngle = RadianDegreeConvert("D", thetaRad) - 90;
@@ -82,14 +82,20 @@ namespace VisionSystem
         /// <param name="msg">출력 할 로그 메세지</param>
         public static void PrintLog(ListBox LogList, string msg)
         {
-            LogList.Items.Add($"[{DateTime.Now:yy/MM/dd} {DateTime.Now:HH:mm:ss}] {msg}");
+            LogList.Items.Add($"[{System.DateTime.Now:yy/MM/dd} {System.DateTime.Now:HH:mm:ss}] {msg}");
             LogList.TopIndex = LogList.Items.Count - 1;
         }
 
         /// <summary>
-        /// 체크 박스 선택
+        /// 그룹박스 활성화
         /// </summary>
-        public static void SelectedCheckBox(CogRecordDisplay Display, CheckBox ChkBox, CheckBox ChkAngle, CheckBox ChkPoint, GroupBox PGroup, GroupBox AGroup)
+        /// <param name="Display">사용 할 디스플레이</param>
+        /// <param name="ChkBox">이벤트 sender 체크박스</param>
+        /// <param name="ChkAngle">angle 체크박스</param>
+        /// <param name="ChkPoint">point 체크박스</param>
+        /// <param name="PGroup">point 그룹박스</param>
+        /// <param name="AGroup">angle 그룹박스</param>
+        public static void ShowGroupBox(Cognex.VisionPro.CogRecordDisplay Display, CheckBox ChkBox, CheckBox ChkAngle, CheckBox ChkPoint, GroupBox PGroup, GroupBox AGroup)
         {
             if (ChkBox.Checked)
             {
@@ -98,12 +104,12 @@ namespace VisionSystem
                     case "PointPattern":
                         ChkAngle.Enabled = false;
                         PGroup.Visible = true;
-                        PGroup.Location = new Point(10, 10);
+                        PGroup.Location = new System.Drawing.Point(10, 10);
                         break;
                     case "AnglePattern":
                         ChkPoint.Enabled = false;
                         AGroup.Visible = true;
-                        AGroup.Location = new Point(10, 10);
+                        AGroup.Location = new System.Drawing.Point(10, 10);
                         break;
                 }
             }
@@ -128,7 +134,7 @@ namespace VisionSystem
         /// 디스플레이 그래픽 제거
         /// </summary>
         /// <param name="Display">제거 할 디스플레이</param>
-        public static void DisplayClear(CogRecordDisplay Display)
+        public static void DisplayClear(Cognex.VisionPro.CogRecordDisplay Display)
         {
             Display.StaticGraphics.Clear();
             Display.InteractiveGraphics.Clear();
