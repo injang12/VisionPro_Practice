@@ -255,9 +255,9 @@ namespace VisionSystem
                 }
 
                 tool.InputImage = DataStore.Pattern.InputImage;
-                tool.RunParams.ZoneAngle.Configuration = Cognex.VisionPro.PMAlign.CogPMAlignZoneConstants.LowHigh;
-                tool.RunParams.ZoneAngle.Low = Cognex.VisionPro.CogMisc.DegToRad(-angle);
-                tool.RunParams.ZoneAngle.High = Cognex.VisionPro.CogMisc.DegToRad(angle);
+                tool.RunParams.ZoneAngle.Configuration = CogPMAlignZoneConstants.LowHigh;
+                tool.RunParams.ZoneAngle.Low = CogMisc.DegToRad(-angle);
+                tool.RunParams.ZoneAngle.High = CogMisc.DegToRad(angle);
                 tool.RunParams.AcceptThreshold = threshold;
                 tool.SearchRegion = search;
                 tool.Run();
